@@ -1,0 +1,615 @@
+Assignment No:10
+Title: MongoDB-Aggregation and Indexing 
+Statement: Design and Develop MongoDB Queries using aggregation and indexing with suitable examples using MongoDB
+------------------------------------------------------------------------------------------------------------------------------------------
+create db and collection:- Here (db:Assignment_10) and (collectiona :student and teachers)
+Assignment9> use Assignment_10;
+switched to db Assignment_10
+Assignment_10> db.createCollection("student");
+{ ok: 1 }
+Assignment_10> db.createCollection("teachers");
+{ ok: 1 }
+Assignment_10> show collections;
+student
+teachers
+------------------------------------------------------------------------------------------------------------------------------------------
+1)Insert documents in student  collection
+Assignment_10> db.student.insertMany([
+... {
+... _id:1,
+... rollNo:101,
+... regNo:201,
+... name:'Varsha',
+... dept:'Computer',
+... marks:[95,90,92,91,93]
+... },
+... {
+... _id:2,
+... rollNo:102,
+... regNo:202,
+... name:'Anushka',
+... dept:'Civil',
+... marks:[92,91,92,91,90]
+... },
+... {
+... _id:3,
+... rollNo:103,
+... regNo:203,
+... name:'Akshata',
+... dept:'ENTC',
+... marks:[90,98,97,96,99]
+... },
+... {
+... _id:4,
+... rollNo:104,
+... regNo:204,
+... name:'Geeta',
+... dept:'IT',
+... marks:[95,94,93,90,90]
+... },
+... {
+... _id:5,
+... rollNo:105,
+... regNo:205,
+... name:'Sampada',
+... dept:'Mechanical',
+... marks:[92,98,94,96,93]
+... },
+... {
+... _id:6,
+... rollNo:106,
+... regNo:206,
+... name:'Shruti',
+... dept:'Electrical',
+... marks:[98,96,94,93,92]
+... },
+... {
+... _id:7,
+... rollNo:107,
+... regNo:207,
+... name:'Poonam',
+... dept:'Civil',
+... marks:[98,99,97,93,92]
+... },
+... {
+... _id:8,
+... rollNo:108,
+... regNo:208,
+... name:'Afrin',
+... dept:'IT',
+... marks:[90,90,90,96,92]
+... },
+... {
+... _id:9,
+... rollNo:109,
+... regNo:209,
+... name:'Nikita',
+... dept:'Mechanical',
+... marks:[91,92,93,94,95]
+... },
+... {
+... _id:10,
+... rollNo:110,
+... regNo:210,
+... name:'Saniya',
+... dept:'Computer',
+... marks:[99,98,97,96,95]
+... }]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': 1,
+    '1': 2,
+    '2': 3,
+    '3': 4,
+    '4': 5,
+    '5': 6,
+    '6': 7,
+    '7': 8,
+    '8': 9,
+    '9': 10
+  }
+}
+Assignment_10> db.student.find().pretty();
+[
+  {
+    _id: 1,
+    rollNo: 101,
+    regNo: 201,
+    name: 'Varsha',
+    dept: 'Computer',
+    marks: [ 95, 90, 92, 91, 93 ]
+  },
+  {
+    _id: 2,
+    rollNo: 102,
+    regNo: 202,
+    name: 'Anushka',
+    dept: 'Civil',
+    marks: [ 92, 91, 92, 91, 90 ]
+  },
+  {
+    _id: 3,
+    rollNo: 103,
+    regNo: 203,
+    name: 'Akshata',
+    dept: 'ENTC',
+    marks: [ 90, 98, 97, 96, 99 ]
+  },
+  {
+    _id: 4,
+    rollNo: 104,
+    regNo: 204,
+    name: 'Geeta',
+    dept: 'IT',
+    marks: [ 95, 94, 93, 90, 90 ]
+  },
+  {
+    _id: 5,
+    rollNo: 105,
+    regNo: 205,
+    name: 'Sampada',
+    dept: 'Mechanical',
+    marks: [ 92, 98, 94, 96, 93 ]
+  },
+  {
+    _id: 6,
+    rollNo: 106,
+    regNo: 206,
+    name: 'Shruti',
+    dept: 'Electrical',
+    marks: [ 98, 96, 94, 93, 92 ]
+  },
+  {
+    _id: 7,
+    rollNo: 107,
+    regNo: 207,
+    name: 'Poonam',
+    dept: 'Civil',
+    marks: [ 98, 99, 97, 93, 92 ]
+  },
+  {
+    _id: 8,
+    rollNo: 108,
+    regNo: 208,
+    name: 'Afrin',
+    dept: 'IT',
+    marks: [ 90, 90, 90, 96, 92 ]
+  },
+  {
+    _id: 9,
+    rollNo: 109,
+    regNo: 209,
+    name: 'Nikita',
+    dept: 'Mechanical',
+    marks: [ 91, 92, 93, 94, 95 ]
+  },
+  {
+    _id: 10,
+    rollNo: 110,
+    regNo: 210,
+    name: 'Saniya',
+    dept: 'Computer',
+    marks: [ 99, 98, 97, 96, 95 ]
+  }
+]
+--------------------------------------------------------****Indexing Query****------------------------------------------------------------
+2)Create single field index 
+Assignment_10> db.student.createIndex({rollNO:1});
+rollNO_1
+------------------------------------------------------------------------------------------------------------------------------------------
+3)Display the information of  created index
+Assignment_10> db.student.getIndexes();
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { rollNO: 1 }, name: 'rollNO_1' }
+]
+------------------------------------------------------------------------------------------------------------------------------------------
+4)create compound filed index
+Assignment_10> db.student.createIndex({rollNo:-1,regNo:1})
+rollNo_-1_regNo_1
+Assignment_10> db.student.getIndexes();
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { rollNO: 1 }, name: 'rollNO_1' },
+  { v: 2, key: { rollNo: -1, regNo: 1 }, name: 'rollNo_-1_regNo_1' }
+]
+------------------------------------------------------------------------------------------------------------------------------------------
+5)To drop single field index
+Assignment_10> db.student.dropIndexes({rollNO:1});
+{ nIndexesWas: 3, ok: 1 }
+Assignment_10> db.student.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { rollNo: -1, regNo: 1 }, name: 'rollNo_-1_regNo_1' }
+]
+------------------------------------------------------------------------------------------------------------------------------------------6)to drop compound field index
+Assignment_10> db.student.dropIndexes({rollNo:-1,regNo:1});
+{ nIndexesWas: 2, ok: 1 }
+Assignment_10> db.student.getIndexes();
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+------------------------------------------------------------------------------------------------------------------------------------------7)create unique field index
+Assignment_10> db.student.createIndex({rollNo:1},{unique:true});
+rollNo_1
+Assignment_10> db.student.getIndexes();
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { rollNo: 1 }, name: 'rollNo_1', unique: true }
+]
+------------------------------------------------------------------------------------------------------------------------------------------8) Search operation without index
+Assignment_10> db.student.find({name:'Varsha'}).explain("executionStats");
+{
+  explainVersion: '2',
+  queryPlanner: {
+    namespace: 'Assignment_10.student',
+    indexFilterSet: false,
+    parsedQuery: { name: { '$eq': 'Varsha' } },
+    queryHash: '1AD872C6',
+    planCacheKey: '8FB87930',
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    winningPlan: {
+      queryPlan: {
+        stage: 'COLLSCAN',
+        planNodeId: 1,
+        filter: { name: { '$eq': 'Varsha' } },
+        direction: 'forward'
+      },
+      slotBasedPlan: {
+        slots: '$$RESULT=s5 env: { s1 = TimeZoneDatabase(America/Kralendijk...America/Cordoba) (timeZoneDB), s2 = Nothing (SEARCH_META), s3 = 1698690853927 (NOW), s7 = "Varsha" }',
+        stages: '[1] filter {traverseF(s4, lambda(l1.0) { ((l1.0 == s7) ?: false) }, false)} \n' +
+          '[1] scan s5 s6 none none none none lowPriority [s4 = name] @"5649e0f3-1f50-4840-b26f-75b764712823" true false '
+      }
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 1,
+    executionTimeMillis: 6,
+    totalKeysExamined: 0,
+    totalDocsExamined: 10,
+    executionStages: {
+      stage: 'filter',
+      planNodeId: 1,
+      nReturned: 1,
+      executionTimeMillisEstimate: 0,
+      opens: 1,
+      closes: 1,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      numTested: 10,
+      filter: 'traverseF(s4, lambda(l1.0) { ((l1.0 == s7) ?: false) }, false) ',
+      inputStage: {
+        stage: 'scan',
+        planNodeId: 1,
+        nReturned: 10,
+        executionTimeMillisEstimate: 0,
+        opens: 1,
+        closes: 1,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        numReads: 10,
+        recordSlot: 5,
+        recordIdSlot: 6,
+        fields: [ 'name' ],
+        outputSlots: [ Long("4") ]
+      }
+    }
+  },
+  command: {
+    find: 'student',
+    filter: { name: 'Varsha' },
+    '$db': 'Assignment_10'
+  },
+  serverInfo: {
+    host: 'Var7083sha',
+    port: 27017,
+    version: '7.0.2',
+    gitVersion: '02b3c655e1302209ef046da6ba3ef6749dd0b62a'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeEngine'
+  },
+  ok: 1
+}
+------------------------------------------------------------------------------------------------------------------------------------------
+ 9)search operation after creating index on name colum
+Assignment_10> db.student.createIndex({'name':1});
+name_1
+Assignment_10> db.student.getIndexes();
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { name: 1 }, name: 'name_1' }
+]
+Assignment_10> db.student.find({'name':'Varsha'}).explain("executionStats");
+
+{
+  explainVersion: '2',
+  queryPlanner: {
+    namespace: 'Assignment_10.student',
+    indexFilterSet: false,
+    parsedQuery: { name: { '$eq': 'Varsha' } },
+    queryHash: '1AD872C6',
+    planCacheKey: '40C04BF4',
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    winningPlan: {
+      queryPlan: {
+        stage: 'FETCH',
+        planNodeId: 2,
+        inputStage: {
+          stage: 'IXSCAN',
+          planNodeId: 1,
+          keyPattern: { name: 1 },
+          indexName: 'name_1',
+          isMultiKey: false,
+          multiKeyPaths: { name: [] },
+          isUnique: false,
+          isSparse: false,
+          isPartial: false,
+          indexVersion: 2,
+          direction: 'forward',
+          indexBounds: { name: [ '["Varsha", "Varsha"]' ] }
+        }
+      },
+      slotBasedPlan: {
+        slots: '$$RESULT=s11 env: { s10 = {"name" : 1}, s2 = Nothing (SEARCH_META), s5 = KS(3C566172736861000104), s3 = 1698691166433 (NOW), s6 = KS(3C56617273686100FE04), s1 = TimeZoneDatabase(America/Kralendijk...America/Cordoba) (timeZoneDB) }',
+        stages: '[2] nlj inner [] [s4, s7, s8, s9, s10] \n' +
+          '    left \n' +
+          '        [1] cfilter {(exists(s5) && exists(s6))} \n' +
+          '        [1] ixseek s5 s6 s9 s4 s7 s8 [] @"5649e0f3-1f50-4840-b26f-75b764712823" @"name_1" true \n' +
+          '    right \n' +
+          '        [2] limit 1 \n' +
+          '        [2] seek s4 s11 s12 s7 s8 s9 s10 [] @"5649e0f3-1f50-4840-b26f-75b764712823" true false \n'
+      }
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 1,
+    executionTimeMillis: 9,
+    totalKeysExamined: 1,
+    totalDocsExamined: 1,
+    executionStages: {
+      stage: 'nlj',
+      planNodeId: 2,
+      nReturned: 1,
+      executionTimeMillisEstimate: 0,
+      opens: 1,
+      closes: 1,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      totalDocsExamined: 1,
+      totalKeysExamined: 1,
+      collectionScans: 0,
+      collectionSeeks: 1,
+      indexScans: 0,
+      indexSeeks: 1,
+      indexesUsed: [ 'name_1' ],
+      innerOpens: 1,
+      innerCloses: 1,
+      outerProjects: [],
+      outerCorrelated: [ Long("4"), Long("7"), Long("8"), Long("9"), Long("10") ],
+      outerStage: {
+        stage: 'cfilter',
+        planNodeId: 1,
+        nReturned: 1,
+        executionTimeMillisEstimate: 0,
+        opens: 1,
+        closes: 1,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        numTested: 1,
+        filter: '(exists(s5) && exists(s6)) ',
+        inputStage: {
+          stage: 'ixseek',
+          planNodeId: 1,
+          nReturned: 1,
+          executionTimeMillisEstimate: 0,
+          opens: 1,
+          closes: 1,
+          saveState: 0,
+          restoreState: 0,
+          isEOF: 1,
+          indexName: 'name_1',
+          keysExamined: 1,
+          seeks: 1,
+          numReads: 2,
+          indexKeySlot: 9,
+          recordIdSlot: 4,
+          snapshotIdSlot: 7,
+          indexIdentSlot: 8,
+          outputSlots: [],
+          indexKeysToInclude: '00000000000000000000000000000000',
+          seekKeyLow: 's5 ',
+          seekKeyHigh: 's6 '
+        }
+      },
+      innerStage: {
+        stage: 'limit',
+        planNodeId: 2,
+        nReturned: 1,
+        executionTimeMillisEstimate: 0,
+        opens: 1,
+        closes: 1,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        limit: 1,
+        inputStage: {
+          stage: 'seek',
+          planNodeId: 2,
+          nReturned: 1,
+          executionTimeMillisEstimate: 0,
+          opens: 1,
+          closes: 1,
+          saveState: 0,
+          restoreState: 0,
+          isEOF: 0,
+          numReads: 1,
+          recordSlot: 11,
+          recordIdSlot: 12,
+          seekKeySlot: 4,
+          snapshotIdSlot: 7,
+          indexIdentSlot: 8,
+          indexKeySlot: 9,
+          indexKeyPatternSlot: 10,
+          fields: [],
+          outputSlots: []
+        }
+      }
+    }
+  },
+  command: {
+    find: 'student',
+    filter: { name: 'Varsha' },
+    '$db': 'Assignment_10'
+  },
+  serverInfo: {
+    host: 'Var7083sha',
+    port: 27017,
+    version: '7.0.2',
+    gitVersion: '02b3c655e1302209ef046da6ba3ef6749dd0b62a'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeEngine'
+  },
+  ok: 1
+}
+----------------------------------------------------------****End of Indexing***----------------------------------------------------------
+
+---------------------------------------------------------***Start of Aggregation***-------------------------------------------------------
+
+**)In aggregation use this {$match:{}},{$group{}},{$sort{}}
+
+1)find the total marks using sum aggregate
+
+A)to find total marks of student collection
+Assignment_10> db.student.aggregate([
+... {$unwind:'$marks'},
+... {$group:{_id:"name",totalscore:{$sum:'$marks'}}}
+... ]);
+[ { _id: 'name', totalscore: 4692 } ]
+
+B)To find total marks of every students
+Assignment_10> db.student.aggregate([ { $unwind: '$marks' }, { $group: { _id: "$name", totalscore: { $sum: '$marks' } } }] );
+[
+  { _id: 'Geeta', totalscore: 462 },
+  { _id: 'Poonam', totalscore: 479 },
+  { _id: 'Anushka', totalscore: 456 },
+  { _id: 'Saniya', totalscore: 485 },
+  { _id: 'Akshata', totalscore: 480 },
+  { _id: 'Afrin', totalscore: 458 },
+  { _id: 'Nikita', totalscore: 465 },
+  { _id: 'Varsha', totalscore: 461 },
+  { _id: 'Shruti', totalscore: 473 },
+  { _id: 'Sampada', totalscore: 473 }
+]
+
+c)marks of total count
+Assignment_10> db.student.aggregate([ { $unwind: '$marks' }, { $group: { _id: "$name", totalscore: { $sum: 1 } } }] );
+[
+  { _id: 'Saniya', totalscore: 5 },
+  { _id: 'Geeta', totalscore: 5 },
+  { _id: 'Anushka', totalscore: 5 },
+  { _id: 'Afrin', totalscore: 5 },
+  { _id: 'Akshata', totalscore: 5 },
+  { _id: 'Shruti', totalscore: 5 },
+  { _id: 'Varsha', totalscore: 5 },
+  { _id: 'Sampada', totalscore: 5 },
+  { _id: 'Nikita', totalscore: 5 },
+  { _id: 'Poonam', totalscore: 5 }
+]
+------------------------------------------------------------------------------------------------------------------------------------------
+2)use sort to display total sum of all student
+Assignment_10> db.student.aggregate([ { $unwind: '$marks' }, { $group: { '_id': "$name", 'totalScore': { $sum: '$marks' } } }, { $sort: { 'totalscore': -1 } }] );
+[
+  { _id: 'Akshata', totalScore: 480 },
+  { _id: 'Nikita', totalScore: 465 },
+  { _id: 'Sampada', totalScore: 473 },
+  { _id: 'Poonam', totalScore: 479 },
+  { _id: 'Saniya', totalScore: 485 },
+  { _id: 'Anushka', totalScore: 456 },
+  { _id: 'Geeta', totalScore: 462 },
+  { _id: 'Shruti', totalScore: 473 },
+  { _id: 'Varsha', totalScore: 461 },
+  { _id: 'Afrin', totalScore: 458 }
+]
+------------------------------------------------------------------------------------------------------------------------------------------3)use match function 
+Assignment_10> db.student.aggregate([
+... {$unwind:'$marks'},
+... {$match:{dept:'Computer'}},
+... {$group:{_id:'$rollNo',totalScore:{$sum:'$marks'}}},
+... {$sort:{totalScore:-1}}
+... ]);
+[ { _id: 110, totalScore: 485 }, { _id: 101, totalScore: 461 } ]
+------------------------------------------------------------------------------------------------------------------------------------------4)use limit function
+
+Assignment_10> db.student.aggregate([ {$unwind:'$marks'},
+... {$group:{_id:'rollNo',totalScore:{$sum:'$marks'}}},
+... {$sort:{totalScore:-1}},
+... {$limit:2},
+... ]);
+[ 
+{ _id: 110, totalScore: 485 },
+{ _id: 103, totalScore: 480 } 
+]
+------------------------------------------------------------------------------------------------------------------------------------------5)with all match,group,sort,limit
+Assignment_10> db.student.aggregate([ 
+{
+$unwind:'$marks'
+},
+{
+$match:{dept:'Civil'}
+},
+{
+$group:{_id:'$rollNo',totalScore:{$sum:'$marks'}}
+},
+{
+$sort:{totalScore:-1}
+},
+{$limit:2
+}
+]);
+[ 
+{ _id: 107, totalScore: 479 }, 
+{ _id: 102, totalScore: 456 } ]
+------------------------------------------------------------------------------------------------------------------------------------------6)to count documents
+Assignment_10> db.student.countDocuments({});
+10
+------------------------------------------------------------------------------------------------------------------------------------------7)to find distinct values
+Assignment_10> db.student.distinct('dept');
+[ 'Civil', 'Computer', 'ENTC', 'Electrical', 'IT', 'Mechanical' ]
+Assignment_10> db.student.distinct('name');
+[
+  'Afrin',   'Akshata',
+  'Anushka', 'Geeta',
+  'Nikita',  'Poonam',
+  'Sampada', 'Saniya',
+  'Shruti',  'Varsha'
+]
+------------------------------------------------------------------------------------------------------------------------------------------8)

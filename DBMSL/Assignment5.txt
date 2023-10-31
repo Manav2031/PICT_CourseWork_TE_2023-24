@@ -1,0 +1,64 @@
+Name : Manav Mehta
+Roll no: 31446
+Class: TE-4
+Subject: DBMSL
+Assignment No: 5
+****************************** Table Creation ************************************
+1. Table Student_marks
+mysql create table Student_marks(stud_name varchar(50), marks int);
+Query OK, 0 rows affected (0.04 sec)
+
+2. Table Result
+mysql create table Result(roll_no int, marks int, class varchar(20));
+Query OK, 0 rows affected (0.05 sec)
+
+***************************** Procedure Creation *******************************
+1. addResult Procedure
+mysql CREATE PROCEDURE addResult(IN rollno INT, IN stname VARCHAR(50), IN
+marks INT)
+BEGIN
+DECLARE result_status VARCHAR(20);
+INSERT INTO student_marks VALUES (stname, marks);
+IF marks <= 1500 AND marks > 989 THEN
+SET result_status = "Distinction”;
+ELSEIF marks <= 989 AND marks > 899 THEN
+SET result_status = “First class”;
+ELSIEF marks <= 899 AND marks > 825 THEN
+SET result_status = “Second class”;
+ELSE
+SET result_status = “Fail”;
+END IF;
+INSERT INTO result VALUES (rollno, marks, result_status);
+END//
+Query OK, 0 rows affected (0.00 sec)
+*************************** Procedure call ***************************************
+mysql call addResult(31446, "Manav Mehta", 1300);
+Query OK, 1 row affected (0.02 sec)
+mysql call addResult(31467, "Varad Pundlik", 1400);
+Query OK, 1 row affected (0.03 sec)
+mysql call addResult(31471, "Divyank Sagvekar", 950);
+Query OK, 1 row affected (0.02 sec)
+mysql call addResult(31443, "Rutwik Malav", 860);
+Query OK, 1 row affected (0.02 sec)
+
+********************************** Output **************************************
+mysql select * from Result;
++---------+-------+--------------+
+| roll_no | marks | class |
++---------+-------+--------------+
+| 31446 | 1300 | Distinction |
+| 31467 | 1400 | Distinction |
+| 31471 | 950 | First Class |
+| 31443 | 860 | Second Class |
++---------+-------+--------------+
+4 rows in set (0.00 sec)
+mysql select * from Student_marks;
++------------------+-------+
+| stud_name | marks |
++------------------+-------+
+| Manav Mehta | 1300 |
+| Varad Pundlik | 1400 |
+| Divyank Sagvekar | 950 |
+| Rutwik Malav | 860 |
++------------------+-------+
+4 rows in set (0.00 sec)

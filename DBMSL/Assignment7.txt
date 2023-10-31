@@ -1,0 +1,70 @@
+Name: Manav Mehta
+Roll No.: 31446
+Subject: DBMSL
+Assignement No: 7
+**************************** Table Creation **************************************
+mysql> create table library(
+-> bid integer primary key,
+-> bname varchar(255),
+-> doi date,
+-> bstatus varchar(20));
+Query OK, 0 rows affected (0.19 sec)
+mysql> create table library_audit(
+-> bid integer primary key,
+-> bname varchar(255),
+-> new_bname varchar(255),
+-> doi date,
+-> bstatus varchar(20));
+Query OK, 0 rows affected (0.04 sec)
+**************************** Data Addition ***************************************
+mysql> insert into library values(1,"Sherlock Holmes",2023-09-24,"Issued");
+Query OK, 1 row affected, 1 warning (0.01 sec)
+mysql> insert into library values(2,"Atomic habits",2023-09-27,"Issued");
+Query OK, 1 row affected, 1 warning (0.02 sec)
+mysql> insert into library values(3,"Ikigai",2023-09-27,"Issued");
+Query OK, 1 row affected, 1 warning (0.02 sec)
+mysql> select * from library;
++-----+-----------------+------------+---------+
+| bid | bname | doi | bstatus |
++-----+-----------------+------------+---------+
+| 1 | Sherlock Holmes | 2023-09-24 | Issued |
+| 2 | Atomic habits | 2023-09-27 | Issued |
+| 3 | Ikigai | 2023-09-27 | Issued |
++-----+-----------------+------------+---------+
+3 rows in set (0.01 sec)
+****************************** Trigger Creation ***********************************
+mysql> create trigger update_trigger
+-> before update on Library
+-> for each row
+-> insert into Library_Audit (bid,bname,doi,bstatus)values
+-> (OLD.bid,OLD.bname,OLD.doi,OLD.status);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create trigger t1
+-> before delete on library
+-> for each row
+-> insert into library_Audit (bid,bname,doi,bstatus)values
+-> (OLD.bid,OLD.bname,OLD.doi,OLD.bstatus);
+Query OK, 0 rows affected (0.06 sec)
+***************************** Output *******************************************
+mysql> update library set bname="Alchemist" where bid=2;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1 Changed: 1 Warnings: 0
+mysql> delete from library where bid=3;
+Query OK, 1 row affected (0.05 sec)
+mysql> select * from library;
++-----+-----------------+------------+---------+
+| bid | bname | doi | bstatus |
++-----+-----------------+------------+---------+
+| 1 | Sherlock Holmes | 2023-09-24 | Issued |
+| 2 | Alchemist | 2023-09-27 | Issued |
++-----+-----------------+------------+---------+
+2 rows in set (0.00 sec)
+mysql> select * from library_audit;
++-----+---------------+-----------+------------+---------+
+| bid | bname | new_bname | doi | bstatus |
++-----+---------------+-----------+------------+---------+
+| 2 | Atomic habits | NULL | 2023-09-24 | Issued |
+| 3 | Ikigai | NULL | 2023-09-27 | Issued |
++-----+---------------+-----------+------------+---------+
+2 rows in set (0.00 sec)

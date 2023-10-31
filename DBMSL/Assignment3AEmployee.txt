@@ -1,0 +1,244 @@
+mysql> show databases;
++--------------------+
+| Database |
++--------------------+
+| information_schema |
+| te31446_db |
+| test |
++--------------------+
+3 rows in set (0.03 sec)
+mysql> use te31446_db;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_te31446_db |
++----------------------+
+| Dept |
+| Employee |
+| Project |
+| student |
++----------------------+
+4 rows in set (0.00 sec)
+mysql> select Emp_fname,Emp_position,Dept_location,Emp_joindate from Employee join Dept on
+Employee.Dept_id=Dept.Dept_id order by Employee.Dept_id;
++-----------+---------------+---------------+--------------+
+| Emp_fname | Emp_position | Dept_location | Emp_joindate |
++-----------+---------------+---------------+--------------+
+| Manav | Student | Pune | 1984-07-06 |
+| Pratik | Student | Pune | 1984-06-09 |
+| Harish | Web Developer | Pune | 1989-02-21 |
+| Varad | Student | Pune | 1986-06-19 |
+| Varad | Student | Nashik | 1987-05-19 |
+| Sahil | Student | Baramati | 1989-10-12 |
+| Sahil | Student | Pune | 1996-09-16 |
++-----------+---------------+---------------+--------------+
+7 rows in set (0.01 sec)
+mysql> select * from Employee;
++--------+---------+-----------+-----------+---------------+------------+--------------+
+| Emp_id | Dept_id | Emp_fname | Emp_lname | Emp_position | Emp_salary | Emp_joindate |
++--------+---------+-----------+-----------+---------------+------------+--------------+
+| 101 | 1 | Manav | Mehta | Student | 220000 | 1984-07-06 |
+| 102 | 2 | Harish | Sumant | Web Developer | 400000 | 1989-02-21 |
+| 103 | 1 | Pratik | Patil | Student | 2750000 | 1984-06-09 |
+| 105 | 3 | Varad | Pundlik | Student | 3000000 | 1986-06-19 |
+| 106 | 4 | Varad | Patil | Student | 3400000 | 1987-05-19 |
+| 108 | 6 | Sahil | Pawar | Student | 5000000 | 1989-10-12 |
+| 109 | 7 | Sahil | Patil | Student | 4500000 | 1996-09-16 |
++--------+---------+-----------+-----------+---------------+------------+--------------+
+7 rows in set (0.00 sec)
+mysql> select * from Dept;
++---------+------------+---------------+
+| Dept_id | Dept_name | Dept_location |
++---------+------------+---------------+
+| 1 | Computer | Pune |
+| 2 | IT | Pune |
+| 3 | ENTC | Pune |
+| 4 | AI/DS | Nashik |
+| 6 | Mechanical | Baramati |
+| 7 | Chemical | Pune |
+| 9 | Civil | Nashik |
+| 10 | ECS | Baramati |
+
++---------+------------+---------------+
+8 rows in set (0.00 sec)
+mysql> select * from Project;
++---------+---------+------------------+---------------+-----------+-----------+
+| Proj_id | Dept_id | Proj_name | Proj_location | Proj_cost | Proj_year |
++---------+---------+------------------+---------------+-----------+-----------+
+| 11 | 1 | Event Management | Pune | 150000 | 2004 |
+| 13 | 1 | Database Project | Baramati | 300000 | 2007 |
+| 14 | 3 | Farmer Project | Pune | 300000 | 2007 |
+| 15 | 4 | Esports Project | Mumbai | 350000 | 2008 |
+| 17 | 6 | Study Project | Nashik | 400000 | 2010 |
+| 18 | 7 | Cars Project | Baramati | 450000 | 2011 |
+| 20 | 9 | Website Project | Pune | 350000 | 2009 |
++---------+---------+------------------+---------------+-----------+-----------+
+7 rows in set (0.00 sec)
+mysql> select * from Employee natural join Dept;
++---------+--------+-----------+-----------+---------------+------------+--------------+------------+---------------+
+| Dept_id | Emp_id | Emp_fname | Emp_lname | Emp_position | Emp_salary | Emp_joindate | Dept_name | Dept_location |
++---------+--------+-----------+-----------+---------------+------------+--------------+------------+---------------+
+| 1 | 101 | Manav | Mehta | Student | 220000 | 1984-07-06 | Computer | Pune |
+| 2 | 102 | Harish | Sumant | Web Developer | 400000 | 1989-02-21 | IT | Pune |
+| 1 | 103 | Pratik | Patil | Student | 2750000 | 1984-06-09 | Computer | Pune |
+| 3 | 105 | Varad | Pundlik | Student | 3000000 | 1986-06-19 | ENTC | Pune |
+| 4 | 106 | Varad | Patil | Student | 3400000 | 1987-05-19 | AI/DS | Nashik |
+| 6 | 108 | Sahil | Pawar | Student | 5000000 | 1989-10-12 | Mechanical | Baramati |
+| 7 | 109 | Sahil | Patil | Student | 4500000 | 1996-09-16 | Chemical | Pune |
++---------+--------+-----------+-----------+---------------+------------+--------------+------------+---------------+
+7 rows in set (0.00 sec)
+mysql> select
+Emp_id,Employee.Dept_id,Project.Dept_id,Emp_fname,Emp_lname,Emp_position,Emp_salary,Emp_joindate,Proj_id,Proj_cost
+from Employee,Project where Employee.Dept_id=Project.Dept_id and Proj_location != "Hyderabad";
++--------+---------+---------+-----------+-----------+--------------+------------+--------------+---------+-----------+
+| Emp_id | Dept_id | Dept_id | Emp_fname | Emp_lname | Emp_position | Emp_salary | Emp_joindate | Proj_id | Proj_cost |
++--------+---------+---------+-----------+-----------+--------------+------------+--------------+---------+-----------+
+| 101 | 1 | 1 | Manav | Mehta | Student | 220000 | 1984-07-06 | 11 | 150000 |
+| 103 | 1 | 1 | Pratik | Patil | Student | 2750000 | 1984-06-09 | 11 | 150000 |
+| 101 | 1 | 1 | Manav | Mehta | Student | 220000 | 1984-07-06 | 13 | 300000 |
+| 103 | 1 | 1 | Pratik | Patil | Student | 2750000 | 1984-06-09 | 13 | 300000 |
+| 105 | 3 | 3 | Varad | Pundlik | Student | 3000000 | 1986-06-19 | 14 | 300000 |
+| 106 | 4 | 4 | Varad | Patil | Student | 3400000 | 1987-05-19 | 15 | 350000 |
+| 108 | 6 | 6 | Sahil | Pawar | Student | 5000000 | 1989-10-12 | 17 | 400000 |
+| 109 | 7 | 7 | Sahil | Patil | Student | 4500000 | 1996-09-16 | 18 | 450000 |
++--------+---------+---------+-----------+-----------+--------------+------------+--------------+---------+-----------+
+8 rows in set (0.00 sec)
+mysql> select Dept_name,Emp_fname,Emp_lname,Emp_position from Employee,Dept,Project where
+Employee.Dept_id=Dept.Dept_id and Dept.Dept_id=Project.Dept_id and Proj_year=2007;
++-----------+-----------+-----------+--------------+
+| Dept_name | Emp_fname | Emp_lname | Emp_position |
++-----------+-----------+-----------+--------------+
+| Computer | Manav | Mehta | Student |
+| Computer | Pratik | Patil | Student |
+| ENTC | Varad | Pundlik | Student |
++-----------+-----------+-----------+--------------+
+3 rows in set (0.00 sec)
+mysql> select Emp_position,Dept_name from Employee,Dept,Project where Employee.Dept_id=Dept.Dept_id and
+Project.Dept_id=Dept.Dept_id and Proj_cost>30000;
++--------------+------------+
+| Emp_position | Dept_name |
++--------------+------------+
+| Student | Computer |
+| Student | Computer |
+| Student | Computer |
+| Student | Computer |
+| Student | ENTC |
+
+| Student | AI/DS |
+| Student | Mechanical |
+| Student | Chemical |
++--------------+------------+
+8 rows in set (0.00 sec)
+mysql> select Proj_name from Project where Proj_year=2007;
++------------------+
+| Proj_name |
++------------------+
+| Database Project |
+| Farmer Project |
++------------------+
+2 rows in set (0.01 sec)
+mysql> select Dept_name,COUNT(Emp_id) from Dept,Employee where Employee.Dept_id=Dept.Dept_id group by
+Dept_name having COUNT(Emp_id)=2;
++-----------+---------------+
+| Dept_name | COUNT(Emp_id) |
++-----------+---------------+
+| Computer | 2 |
++-----------+---------------+
+1 row in set (0.00 sec)
+mysql> select COUNT(Emp_id) as "Total number of employees who have joined any project before 2009" from Employee
+where year(Emp_joindate) < 2009;
++-------------------------------------------------------------------+
+| Total number of employees who have joined any project before 2009 |
++-------------------------------------------------------------------+
+| 7 |
++-------------------------------------------------------------------+
+1 row in set (0.00 sec)
+mysql> create view Emp_Dept as select
+Emp_id,Employee.Dept_id,Emp_fname,Emp_lname,Emp_position,Emp_salary,Emp_joindate,Dept_name,Dept_location from
+Employee,Dept where
+Employee.Dept_id=Dept.Dept_id;
+Query OK, 0 rows affected (0.04 sec)
+mysql> select * from Emp_Dept;
++--------+---------+-----------+-----------+---------------+------------+--------------+------------+---------------+
+| Emp_id | Dept_id | Emp_fname | Emp_lname | Emp_position | Emp_salary | Emp_joindate | Dept_name | Dept_location |
++--------+---------+-----------+-----------+---------------+------------+--------------+------------+---------------+
+| 101 | 1 | Manav | Mehta | Student | 220000 | 1984-07-06 | Computer | Pune |
+| 102 | 2 | Harish | Sumant | Web Developer | 400000 | 1989-02-21 | IT | Pune |
+| 103 | 1 | Pratik | Patil | Student | 2750000 | 1984-06-09 | Computer | Pune |
+| 105 | 3 | Varad | Pundlik | Student | 3000000 | 1986-06-19 | ENTC | Pune |
+| 106 | 4 | Varad | Patil | Student | 3400000 | 1987-05-19 | AI/DS | Nashik |
+| 108 | 6 | Sahil | Pawar | Student | 5000000 | 1989-10-12 | Mechanical | Baramati |
+| 109 | 7 | Sahil | Patil | Student | 4500000 | 1996-09-16 | Chemical | Pune |
++--------+---------+-----------+-----------+---------------+------------+--------------+------------+---------------+
+7 rows in set (0.00 sec)
+mysql> create view Emp_records as select Emp_id,Employee.Dept_id,Emp_fname,Emp_lname from Employee;
+Query OK, 0 rows affected (0.10 sec)
+mysql> select * from Emp_records;
++--------+---------+-----------+-----------+
+| Emp_id | Dept_id | Emp_fname | Emp_lname |
++--------+---------+-----------+-----------+
+| 101 | 1 | Manav | Mehta |
+| 102 | 2 | Harish | Sumant |
+| 103 | 1 | Pratik | Patil |
+| 105 | 3 | Varad | Pundlik |
+| 106 | 4 | Varad | Patil |
+| 108 | 6 | Sahil | Pawar |
+| 109 | 7 | Sahil | Patil |
++--------+---------+-----------+-----------+
+
+7 rows in set (0.00 sec)
+mysql> insert into Emp_records values(104,4,"Divyank","Sagvekar");
+Query OK, 1 row affected (0.00 sec)
+mysql> select * from Emp_records;
++--------+---------+-----------+-----------+
+| Emp_id | Dept_id | Emp_fname | Emp_lname |
++--------+---------+-----------+-----------+
+| 101 | 1 | Manav | Mehta |
+| 102 | 2 | Harish | Sumant |
+| 103 | 1 | Pratik | Patil |
+| 104 | 4 | Divyank | Sagvekar |
+| 105 | 3 | Varad | Pundlik |
+| 106 | 4 | Varad | Patil |
+| 108 | 6 | Sahil | Pawar |
+| 109 | 7 | Sahil | Patil |
++--------+---------+-----------+-----------+
+8 rows in set (0.00 sec)
+mysql> update Emp_records set Dept_id=2 where Emp_fname="Varad" and Emp_lname="Pundlik";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1 Changed: 1 Warnings: 0
+mysql> select * from Emp_records;
++--------+---------+-----------+-----------+
+| Emp_id | Dept_id | Emp_fname | Emp_lname |
++--------+---------+-----------+-----------+
+| 101 | 1 | Manav | Mehta |
+| 102 | 2 | Harish | Sumant |
+| 103 | 1 | Pratik | Patil |
+| 104 | 4 | Divyank | Sagvekar |
+| 105 | 2 | Varad | Pundlik |
+| 106 | 4 | Varad | Patil |
+| 108 | 6 | Sahil | Pawar |
+| 109 | 7 | Sahil | Patil |
++--------+---------+-----------+-----------+
+8 rows in set (0.00 sec)
+mysql> delete from Emp_records where Emp_id=106;
+Query OK, 1 row affected (0.01 sec)
+mysql> select * from Emp_records;
++--------+---------+-----------+-----------+
+| Emp_id | Dept_id | Emp_fname | Emp_lname |
++--------+---------+-----------+-----------+
+| 101 | 1 | Manav | Mehta |
+| 102 | 2 | Harish | Sumant |
+| 103 | 1 | Pratik | Patil |
+| 104 | 4 | Divyank | Sagvekar |
+| 105 | 2 | Varad | Pundlik |
+| 108 | 6 | Sahil | Pawar |
+| 109 | 7 | Sahil | Patil |
++--------+---------+-----------+-----------+
+7 rows in set (0.00 sec)
+mysql> drop view Emp_records;
+Query OK, 0 rows affected (0.00 sec)
+mysql> select * from Emp_records;
+ERROR 1146 (42S02): Table 'te31446_db.Emp_records' doesn't exist
+mysql>

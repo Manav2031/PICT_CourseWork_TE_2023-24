@@ -1,0 +1,56 @@
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import java.util.Iterator;
+import org.bson.Document;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+public class MongoConnect {
+public static void main(String[] args) {
+try
+{
+//Connect to mongodb
+
+MongoClient mongo = new MongoClient("localhost", 27017);
+// access the database
+MongoDatabase db = mongo.getDatabase("vijdb");
+// Creating a collection
+db.createCollection("students");
+
+// access the collection
+MongoCollection <Document> collection = db.getCollection("students");
+//insert document into collection
+Document doc = new Document("name", "James");
+doc.append("age", 30)
+doc.append("Branch", "Computer")
+doc.append("city", "Pune")
+doc.append("CGPA",8.7);
+collection.insertOne(doc);
+
+// Retrieving all documents from collection
+// Getting the iterable object
+FindIterable<Document> iterDoc = collection.find();
+int i = 1;
+// Getting the iterator
+Iterator it = iterDoc.iterator();
+while (it.hasNext()) {
+System.out.println(it.next());
+i++;
+}
+// Updating the document
+collection.updateOne(Filters.eq("name ","James"), Updates.set("CGPA",
+
+8.9));
+
+// Deleting the documents
+
+collection.deleteOne(Filters.eq("city", "Pune"));
+}
+catch(Exception e)
+{
+e.printStackTrace();
+}
+}
+}

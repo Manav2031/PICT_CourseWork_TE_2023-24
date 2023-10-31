@@ -1,0 +1,272 @@
+mysql> show databases;
++--------------------+
+| Database |
++--------------------+
+| information_schema |
+| te31446_db |
+| test |
++--------------------+
+3 rows in set (0.02 sec)
+mysql> use te31446_db;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_te31446_db |
++----------------------+
+| Dept |
+| Employee |
+| Project |
+| student |
++----------------------+
+4 rows in set (0.00 sec)
+mysql> select * from Dept;
++---------+------------+---------------+
+| Dept_id | Dept_name | Dept_location |
++---------+------------+---------------+
+| 1 | Computer | Pune |
+| 2 | IT | Mumbai |
+| 3 | ENTC | Pune |
+| 4 | AI/DS | Nashik |
+| 5 | ECE | Mumbai |
+| 6 | Mechanical | Baramati |
+| 7 | Chemical | Pune |
+| 8 | Electrical | Mumbai |
+| 9 | Civil | Nashik |
+| 10 | ECS | Baramati |
++---------+------------+---------------+
+10 rows in set (0.00 sec)
+
+mysql> select distinct Emp_position from Employee;
++--------------+
+| Emp_position |
++--------------+
+| Student |
++--------------+
+1 row in set (0.00 sec)
+mysql> select * from Employee;
++--------+---------+-----------+-----------+--------------+------------+--------------+
+| Emp_id | Dept_id | Emp_fname | Emp_lname | Emp_position | Emp_salary | Emp_joindate |
++--------+---------+-----------+-----------+--------------+------------+--------------+
+
+| 101 | 1 | Manav | Mehta | Student | 200000 | 1984-07-06 |
+| 102 | 2 | Abhishek | Pawar | Student | 2000000 | 1985-07-11 |
+| 103 | 1 | Pratik | Patil | Student | 2500000 | 1984-06-09 |
+| 104 | 2 | Harsh | Bora | Student | 300000 | 1986-05-09 |
+| 105 | 3 | Varad | Pundlik | Student | 3000000 | 1986-06-19 |
+| 106 | 4 | Varad | Patil | Student | 3400000 | 1987-05-19 |
+| 107 | 5 | Rutwik | Malav | Student | 4000000 | 1988-09-23 |
+| 108 | 6 | Sahil | Pawar | Student | 5000000 | 1989-10-12 |
+| 109 | 7 | Sahil | Patil | Student | 4500000 | 1996-09-16 |
+| 110 | 8 | Divyank | Sagvekar | Student | 6500000 | 2003-10-24 |
++--------+---------+-----------+-----------+--------------+------------+--------------+
+10 rows in set (0.00 sec)
+mysql> update Employee set Emp_salary=Emp_salary+(0.1*Emp_salary) where year(Emp_joindate) <
+1985;
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2 Changed: 2 Warnings: 0
+mysql> select * from Employee;
++--------+---------+-----------+-----------+--------------+------------+--------------+
+| Emp_id | Dept_id | Emp_fname | Emp_lname | Emp_position | Emp_salary | Emp_joindate |
++--------+---------+-----------+-----------+--------------+------------+--------------+
+| 101 | 1 | Manav | Mehta | Student | 220000 | 1984-07-06 |
+| 102 | 2 | Abhishek | Pawar | Student | 2000000 | 1985-07-11 |
+| 103 | 1 | Pratik | Patil | Student | 2750000 | 1984-06-09 |
+| 104 | 2 | Harsh | Bora | Student | 300000 | 1986-05-09 |
+| 105 | 3 | Varad | Pundlik | Student | 3000000 | 1986-06-19 |
+| 106 | 4 | Varad | Patil | Student | 3400000 | 1987-05-19 |
+| 107 | 5 | Rutwik | Malav | Student | 4000000 | 1988-09-23 |
+| 108 | 6 | Sahil | Pawar | Student | 5000000 | 1989-10-12 |
+| 109 | 7 | Sahil | Patil | Student | 4500000 | 1996-09-16 |
+| 110 | 8 | Divyank | Sagvekar | Student | 6500000 | 2003-10-24 |
++--------+---------+-----------+-----------+--------------+------------+--------------+
+10 rows in set (0.00 sec)
+mysql> delete from Dept where Dept_location="Mumbai";
+Query OK, 3 rows affected (0.02 sec)
+mysql> select * from Dept;
++---------+------------+---------------+
+| Dept_id | Dept_name | Dept_location |
++---------+------------+---------------+
+| 1 | Computer | Pune |
+| 3 | ENTC | Pune |
+| 4 | AI/DS | Nashik |
+| 6 | Mechanical | Baramati |
+| 7 | Chemical | Pune |
+| 9 | Civil | Nashik |
+| 10 | ECS | Baramati |
++---------+------------+---------------+
+7 rows in set (0.00 sec)
+mysql> select * from Employee;
++--------+---------+-----------+-----------+--------------+------------+--------------+
+| Emp_id | Dept_id | Emp_fname | Emp_lname | Emp_position | Emp_salary | Emp_joindate |
++--------+---------+-----------+-----------+--------------+------------+--------------+
+| 101 | 1 | Manav | Mehta | Student | 220000 | 1984-07-06 |
+
+| 103 | 1 | Pratik | Patil | Student | 2750000 | 1984-06-09 |
+| 105 | 3 | Varad | Pundlik | Student | 3000000 | 1986-06-19 |
+| 106 | 4 | Varad | Patil | Student | 3400000 | 1987-05-19 |
+| 108 | 6 | Sahil | Pawar | Student | 5000000 | 1989-10-12 |
+| 109 | 7 | Sahil | Patil | Student | 4500000 | 1996-09-16 |
++--------+---------+-----------+-----------+--------------+------------+--------------+
+6 rows in set (0.00 sec)
+mysql> select * from Project;
++---------+---------+------------------+---------------+-----------+-----------+
+| Proj_id | Dept_id | Proj_name | Proj_location | Proj_cost | Proj_year |
++---------+---------+------------------+---------------+-----------+-----------+
+| 11 | 1 | Event Management | Pune | 150000 | 2004 |
+| 13 | 1 | Database Project | Baramati | 300000 | 2007 |
+| 14 | 3 | Farmer Project | Pune | 300000 | 2007 |
+| 15 | 4 | Esports Project | Mumbai | 350000 | 2008 |
+| 17 | 6 | Study Project | Nashik | 400000 | 2010 |
+| 18 | 7 | Cars Project | Baramati | 450000 | 2011 |
+| 20 | 9 | Website Project | Pune | 350000 | 2009 |
++---------+---------+------------------+---------------+-----------+-----------+
+7 rows in set (0.00 sec)
+mysql> select * from Project;
++---------+---------+------------------+---------------+-----------+-----------+
+| Proj_id | Dept_id | Proj_name | Proj_location | Proj_cost | Proj_year |
++---------+---------+------------------+---------------+-----------+-----------+
+| 11 | 1 | Event Management | Pune | 150000 | 2004 |
+| 13 | 1 | Database Project | Baramati | 300000 | 2007 |
+| 14 | 3 | Farmer Project | Pune | 300000 | 2007 |
+| 15 | 4 | Esports Project | Mumbai | 350000 | 2008 |
+| 17 | 6 | Study Project | Nashik | 400000 | 2010 |
+| 18 | 7 | Cars Project | Baramati | 450000 | 2011 |
+| 20 | 9 | Website Project | Pune | 350000 | 2009 |
++---------+---------+------------------+---------------+-----------+-----------+
+7 rows in set (0.00 sec)
+mysql> select Proj_name from Project where Proj_location="Pune";
++------------------+
+| Proj_name |
++------------------+
+| Event Management |
+| Farmer Project |
+| Website Project |
++------------------+
+3 rows in set (0.00 sec)
+mysql> select Proj_name from Project where Proj_cost between 100000 and 500000;
++------------------+
+| Proj_name |
++------------------+
+| Event Management |
+| Database Project |
+| Farmer Project |
+| Esports Project |
+| Study Project |
+| Cars Project |
+| Website Project |
+
++------------------+
+7 rows in set (0.00 sec)
+mysql> select * from Project;
++---------+---------+------------------+---------------+-----------+-----------+
+| Proj_id | Dept_id | Proj_name | Proj_location | Proj_cost | Proj_year |
++---------+---------+------------------+---------------+-----------+-----------+
+| 11 | 1 | Event Management | Pune | 150000 | 2004 |
+| 13 | 1 | Database Project | Baramati | 300000 | 2007 |
+| 14 | 3 | Farmer Project | Pune | 300000 | 2007 |
+| 15 | 4 | Esports Project | Mumbai | 350000 | 2008 |
+| 17 | 6 | Study Project | Nashik | 400000 | 2010 |
+| 18 | 7 | Cars Project | Baramati | 450000 | 2011 |
+| 20 | 9 | Website Project | Pune | 350000 | 2009 |
++---------+---------+------------------+---------------+-----------+-----------+
+7 rows in set (0.00 sec)
+mysql> select Proj_name from Project where Proj_cost=(select MAX(Proj_cost) from Project);
++--------------+
+| Proj_name |
++--------------+
+| Cars Project |
++--------------+
+1 row in set (0.00 sec)
+mysql> select AVG(Proj_cost) from Project;
++----------------+
+| AVG(Proj_cost) |
++----------------+
+| 328571.4286 |
++----------------+
+1 row in set (0.00 sec)
+mysql> select Emp_id,Emp_fname,Emp_lname from Employee order by Emp_lname desc;
++--------+-----------+-----------+
+| Emp_id | Emp_fname | Emp_lname |
++--------+-----------+-----------+
+| 105 | Varad | Pundlik |
+| 108 | Sahil | Pawar |
+| 103 | Pratik | Patil |
+| 106 | Varad | Patil |
+| 109 | Sahil | Patil |
+| 101 | Manav | Mehta |
++--------+-----------+-----------+
+6 rows in set (0.00 sec)
+mysql> select Proj_name,Proj_location,Proj_cost from Project where Proj_year in(2004,2005,2007);
++------------------+---------------+-----------+
+| Proj_name | Proj_location | Proj_cost |
++------------------+---------------+-----------+
+| Event Management | Pune | 150000 |
+| Database Project | Baramati | 300000 |
+| Farmer Project | Pune | 300000 |
++------------------+---------------+-----------+
+3 rows in set (0.00 sec)
+mysql> select * from Employee;
+
++--------+---------+-----------+-----------+--------------+------------+--------------+
+| Emp_id | Dept_id | Emp_fname | Emp_lname | Emp_position | Emp_salary | Emp_joindate |
++--------+---------+-----------+-----------+--------------+------------+--------------+
+| 101 | 1 | Manav | Mehta | Student | 220000 | 1984-07-06 |
+| 103 | 1 | Pratik | Patil | Student | 2750000 | 1984-06-09 |
+| 105 | 3 | Varad | Pundlik | Student | 3000000 | 1986-06-19 |
+| 106 | 4 | Varad | Patil | Student | 3400000 | 1987-05-19 |
+| 108 | 6 | Sahil | Pawar | Student | 5000000 | 1989-10-12 |
+| 109 | 7 | Sahil | Patil | Student | 4500000 | 1996-09-16 |
++--------+---------+-----------+-----------+--------------+------------+--------------+
+6 rows in set (0.00 sec)
+mysql> select * from Dept;
++---------+------------+---------------+
+| Dept_id | Dept_name | Dept_location |
++---------+------------+---------------+
+| 1 | Computer | Pune |
+| 3 | ENTC | Pune |
+| 4 | AI/DS | Nashik |
+| 6 | Mechanical | Baramati |
+| 7 | Chemical | Pune |
+| 9 | Civil | Nashik |
+| 10 | ECS | Baramati |
++---------+------------+---------------+
+7 rows in set (0.00 sec)
+mysql> select * from Project;
++---------+---------+------------------+---------------+-----------+-----------+
+| Proj_id | Dept_id | Proj_name | Proj_location | Proj_cost | Proj_year |
++---------+---------+------------------+---------------+-----------+-----------+
+| 11 | 1 | Event Management | Pune | 150000 | 2004 |
+| 13 | 1 | Database Project | Baramati | 300000 | 2007 |
+| 14 | 3 | Farmer Project | Pune | 300000 | 2007 |
+| 15 | 4 | Esports Project | Mumbai | 350000 | 2008 |
+| 17 | 6 | Study Project | Nashik | 400000 | 2010 |
+| 18 | 7 | Cars Project | Baramati | 450000 | 2011 |
+| 20 | 9 | Website Project | Pune | 350000 | 2009 |
++---------+---------+------------------+---------------+-----------+-----------+
+7 rows in set (0.01 sec)
+mysql> insert into Dept values(2,"IT","Pune");
+Query OK, 1 row affected (0.02 sec)
+mysql> insert into Employee values(102,2,"Harish","Sumant","Web Developer",400000,"1989-02-21");
+Query OK, 1 row affected (0.02 sec)
+mysql> select Emp_id,Emp_fname,Emp_lname,Emp_position,Emp_salary,Emp_joindate from
+Employee,Dept where (Employee.Dept_id=Dept.Dept_id) and (Dept_name in ("Computer","IT")) and
+(Emp_fname like "p%" or Emp_fname like "h%");
++--------+-----------+-----------+---------------+------------+--------------+
+| Emp_id | Emp_fname | Emp_lname | Emp_position | Emp_salary | Emp_joindate |
++--------+-----------+-----------+---------------+------------+--------------+
+| 102 | Harish | Sumant | Web Developer | 400000 | 1989-02-21 |
+| 103 | Pratik | Patil | Student | 2750000 | 1984-06-09 |
++--------+-----------+-----------+---------------+------------+--------------+
+2 rows in set (0.00 sec)
+
+mysql> select distinct Emp_position from Employee;
++---------------+
+| Emp_position |
++---------------+
+| Student |
+| Web Developer |
++---------------+
+2 rows in set (0.00 sec)
+mysql>
