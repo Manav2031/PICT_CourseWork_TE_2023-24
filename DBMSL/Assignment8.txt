@@ -1,12 +1,9 @@
-Name:Ruchi Bhale
-Class:TE3(N3)
-Roll no:31365
-
-package jdbc1;
 import java.sql.*;
 import java.util.*;
-class assign{
-public static void main(String args[]){  
+class lasttry
+{
+public static void main(String args[]) throws ClassNotFoundException
+{
 System.out.println("1.Check Connection");
 System.out.println("Enter choice: ");
 Scanner sc1=new Scanner(System.in);
@@ -15,9 +12,9 @@ try
 {
 Class.forName("com.mysql.cj.jdbc.Driver");
 Connection con=DriverManager.getConnection(
-"jdbc:mysql://10.10.10.118/31365_db","te31365","te31365");
+"jdbc:mysql://10.10.15.233/te31473db","te31473","te31473");
 Statement smt=con.createStatement();
-if(con!=null &amp;&amp; !con.isClosed())
+if(con!=null && !con.isClosed())
 {
 System.out.println("Database Connected");
 }
@@ -25,7 +22,8 @@ else
 {
 System.out.println("Not connected");
 }
-switch(ch) {
+switch(ch)
+{
 case 1:
 String st="create table ";
 Scanner sc=new Scanner(System.in);
@@ -42,7 +40,6 @@ break;
 case 2:
 String st1="insert into temp values( ";
 Scanner sc2=new Scanner(System.in);
-
 System.out.println("Enter the values: ");
 String val=sc2.nextLine();
 st1=st1+val+");";
@@ -62,17 +59,21 @@ st2=st2+new_name+"where rollno="+roll_no+";";
 smt.executeUpdate(st2);
 sc3.close();
 break;
+
 case 4:
 String st3="delete from temp where ";
 Scanner sc4=new Scanner(System.in);
-System.out.println(“Enter the constraints”);
+System.out.println("Enter the constraints");
 String constraint=sc4.nextLine();
 st3=st3+constraint;
 smt.executeUpdate(st3);
 sc4.close();
 break;
-}
-}catch(Exception e){ System.out.println(e);}  
 
+}
+}catch(Exception e)
+{
+System.out.println(e);
+}
 }
 }
