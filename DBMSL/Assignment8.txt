@@ -1,79 +1,145 @@
-import java.sql.*;
 import java.util.*;
-class lasttry
-{
-public static void main(String args[]) throws ClassNotFoundException
-{
-System.out.println("1.Check Connection");
-System.out.println("Enter choice: ");
-Scanner sc1=new Scanner(System.in);
-int ch=sc1.nextInt();
-try
-{
-Class.forName("com.mysql.cj.jdbc.Driver");
-Connection con=DriverManager.getConnection(
-"jdbc:mysql://10.10.15.233/te31473db","te31473","te31473");
-Statement smt=con.createStatement();
-if(con!=null && !con.isClosed())
-{
-System.out.println("Database Connected");
-}
-else
-{
-System.out.println("Not connected");
-}
-switch(ch)
-{
-case 1:
-String st="create table ";
-Scanner sc=new Scanner(System.in);
-System.out.println("Enter the name of the table: ");
-String name=sc.nextLine();
-System.out.println("Enter the attributes with the datatype: ");
-String values=sc.nextLine();
-st=st+name+"("+values+");";
-System.out.println(st);
-smt.executeUpdate(st);
-System.out.println("Table is created!");
-sc.close();
-break;
-case 2:
-String st1="insert into temp values( ";
-Scanner sc2=new Scanner(System.in);
-System.out.println("Enter the values: ");
-String val=sc2.nextLine();
-st1=st1+val+");";
-System.out.println(st1);
-smt.executeUpdate(st1);
-System.out.println("Inserted data!");
-sc2.close();
-break;
-case 3:
-String st2="update temp set name= ";
-Scanner sc3=new Scanner(System.in);
-System.out.println("Enter the value to be updated: ");
-int roll_no=sc3.nextInt();
-System.out.println("Enter new name: ");
-String new_name=sc3.nextLine();
-st2=st2+new_name+"where rollno="+roll_no+";";
-smt.executeUpdate(st2);
-sc3.close();
-break;
 
-case 4:
-String st3="delete from temp where ";
-Scanner sc4=new Scanner(System.in);
-System.out.println("Enter the constraints");
-String constraint=sc4.nextLine();
-st3=st3+constraint;
-smt.executeUpdate(st3);
-sc4.close();
-break;
+import java.sql.*;
 
-}
-}catch(Exception e)
-{
-System.out.println(e);
-}
-}
+
+
+public class mysql8 {
+
+	public static void main(String args[]) {
+
+		Connection connection = null;
+
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			connection = DriverManager.getConnection("jdbc:mysql://10.10.15.96/sql33db","sql33","sql33");
+
+			Statement statement = connection.createStatement();
+
+//			creating table in database test
+			String createTable = "CREATE TABLE IF NOT EXISTS asgn (id VARCHAR(255), name VARCHAR(255));";
+            		statement.executeUpdate(createTable);
+
+			
+			ResultSet result;
+
+			Scanner in = new Scanner(System.in);
+
+			String ch = "y";
+
+			while(ch != "n") {
+
+				System.out.println("----------------------------------------------------------");
+
+				System.out.println("1. Print Records");
+
+				System.out.println("2. Add Records");
+
+				System.out.println("3. Update Record");
+
+				System.out.println("4. Delete Record");
+
+				int c = in.nextInt();
+
+				if(c == 1) {
+
+					String print = "select * from asgn;";
+
+					result = statement.executeQuery(print);
+
+					while(result.next()) {
+
+						System.out.print(result.getString("id"));
+
+						System.out.print(" ");
+
+						System.out.print(result.getString("name"));
+
+						System.out.println("");
+
+					}
+
+				}
+
+				else if(c == 2) {
+
+					String name , id;
+
+					System.out.println("Enter id and name of the employee - ");
+
+					id = in.next();
+
+					name = in.next();
+
+					String insert = "insert into asgn values(" + id + "," +" ' "  + name + "');";
+
+					statement.executeUpdate(insert);
+				}
+
+				else if(c == 3) {
+
+					String name,id;
+
+					System.out.println("Enter id of the employee who's record to be updated - ");
+
+					id = in.next();
+
+					System.out.println("Enter new name - ");
+
+					name = in.next();
+
+					String update = "update asgn set name = " + "'" + name + "'" + " where id = " + id + ";";
+
+					statement.executeUpdate(update);
+
+				}
+
+				else if(c==4) {
+
+					String name , id;
+
+					System.out.println("Enter id  of the employee who's record to be deleted - ");
+
+					id = in.next();
+
+					String del = "delete from asgn where id = " + id + ";";
+
+					statement.executeUpdate(del);
+
+				}
+
+				else {
+
+					System.out.println("You have entered a wrong choice.");
+
+				}
+
+				
+
+				System.out.println("Do you want to continue (y/n) - ");
+
+				ch = in.next();
+
+				if(ch == "n"){
+
+					ch = "n";
+
+				}
+
+			}
+
+			
+
+ 		}
+
+		catch(Exception e) {
+
+			System.out.print(e);
+
+		}
+
+	}
+
 }
