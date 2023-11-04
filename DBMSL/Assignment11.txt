@@ -1,86 +1,50 @@
-NAME :Varsha Prabhakar Malode
-ROLL NO :31445
-ASSIGNMENT B3
-================================================================================
-MAP REDUCE IN MONGODB
-1.] CREATE COLLECTION "Orders"
-db.createCollection("Orders")
-
-2.] Insert Atleast 30 records in "Orders" db.Orders.insert({_id:1, custId:101,
-ordDate:new Date("2021-11-01"), price:25}) db.Orders.insert({_id:2, custId:101,
-ordDate:new Date("2021-11-08"), price:70}) db.Orders.insert({_id:3, custId:102,
-ordDate:new Date("2021-11-08"), price:50}) db.Orders.insert({_id:4, custId:102,
-ordDate:new Date("2021-11-18"), price:25}) db.Orders.insert({_id:5, custId:102,
-ordDate:new Date("2021-11-19"), price:50}) db.Orders.insert({_id:6, custId:103,
-ordDate:new Date("2021-11-19"), price:35}) db.Orders.insert({_id:7, custId:103,
-ordDate:new Date("2021-11-20"), price:25}) db.Orders.insert({_id:8, custId:104,
-ordDate:new Date("2021-11-20"), price:75}) db.Orders.insert({_id:9, custId:104,
-ordDate:new Date("2021-11-20"), price:55}) db.Orders.insert({_id:10,
-custId:104, ordDate:new Date("2021-11-23"), price:15})
-db.Orders.insert({_id:11, custId:105, ordDate:new Date("2021-11-24"),
-price:85}) db.Orders.insert({_id:12, custId:105, ordDate:new Date("2021-11-
-24"), price:65}) db.Orders.insert({_id:13, custId:105, ordDate:new Date("2021-
-11-25"), price:75}) db.Orders.insert({_id:14, custId:106, ordDate:new
-Date("2021-11-25"), price:65}) db.Orders.insert({_id:15, custId:106,
-ordDate:new Date("2021-11-25"), price:35}) db.Orders.insert({_id:16,
-custId:106, ordDate:new Date("2021-11-26"), price:95})
-db.Orders.insert({_id:17, custId:106, ordDate:new Date("2021-11-26"),
-price:65}) db.Orders.insert({_id:18, custId:107, ordDate:new Date("2021-11-
-26"), price:55}) db.Orders.insert({_id:19, custId:107, ordDate:new Date("2021-
-11-27"), price:95}) db.Orders.insert({_id:20, custId:107, ordDate:new
-
-Date("2021-11-27"), price:85}) db.Orders.insert({_id:21, custId:107,
-ordDate:new Date("2021-11-28"), price:75}) db.Orders.insert({_id:22,
-custId:108, ordDate:new Date("2021-11-28"), price:25})
-db.Orders.insert({_id:23, custId:108, ordDate:new Date("2021-11-29"),
-price:45}) db.Orders.insert({_id:24, custId:108, ordDate:new Date("2021-11-
-29"), price:25}) db.Orders.insert({_id:25, custId:108, ordDate:new Date("2021-
-11-29"), price:65}) db.Orders.insert({_id:26, custId:109, ordDate:new
-Date("2021-11-30"), price:75}) db.Orders.insert({_id:27, custId:109,
-ordDate:new Date("2021-11-30"), price:85}) db.Orders.insert({_id:28,
-custId:110, ordDate:new Date("2021-11-30"), price:15})
-db.Orders.insert({_id:29, custId:110, ordDate:new Date("2021-11-30"),
-price:35}) db.Orders.insert({_id:30, custId:110, ordDate:new Date("2021-12-
-01"), price:55})
-
-3.] Display All records in "Orders"
-db.Orders.find().pretty();
-
-4.] Display Total Price of each Customer var mapFun =
-function(){emit(this.custId, this.price);} var reduceFun = function(keycustId,
-valuesPrices){return Array.sum(valuesPrices);} db.Orders.mapReduce(mapFun,
-reduceFun, {out:"Result"})
-db.Result.find()
-
-5.] Display average Price of each Customer where ordDate is greater than 2021-11-19
-db.Orders.mapReduce(
-function(){
-emit(this.custId, this.price);
-},
-function(key, values){
-return Array.avg(values)
-
-},
-{query: { ordDate:{$gte:new Date("2021-11-19")
+student> db.createCollection("customers")
+{ ok: 1 }
+student> db.customers.insertMany([{ name: "Pavan Thorat", email: "pavan@gmail.com", contact: 9879435335, age: 21, address: { city: "sinnar", zip: 404115 }, interestCategories: ["Movies", "Mobile", "Shirts"], orders: [{ ordID: 4, prodName: "Movies", quantity: 1, price: 450 }, { ordID: 3, prodName: "Shirt", quantity: 2, price: 190 }] }, { name: "Abhishek Bhosale", email: "abhi@gmail.com", contact: 32131343234, age: 21, address: { city: "Kolhapur", zip: 416101 }, int
+erestCategories: ["Laptop", "Mobile", "Food"], orders: [{ ordID: 4, prodName: "mobile", quantity: 1, price: 15550 }] }])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("6545d1b304584bdf3ca212a4"),
+    '1': ObjectId("6545d1b304584bdf3ca212a5")
+  }
 }
-},
-out:"Result2"
-});
+student> db.customers.find().pretty()
+[
+  {
+    _id: ObjectId("6545d1b304584bdf3ca212a4"),
+    name: 'Pavan Thorat',
+    email: 'pavan@gmail.com',
+    contact: 9879435335,
+    age: 21,
+    address: { city: 'sinnar', zip: 404115 },
+    interestCategories: [ 'Movies', 'Mobile', 'Shirts' ],
+    orders: [
+      { ordID: 4, prodName: 'Movies', quantity: 1, price: 450 },
+      { ordID: 3, prodName: 'Shirt', quantity: 2, price: 190 }
+    ]
+  },
+  {
+    _id: ObjectId("6545d1b304584bdf3ca212a5"),
+    name: 'Abhishek Bhosale',
+    email: 'abhi@gmail.com',
+    contact: 32131343234,
+    age: 21,
+    address: { city: 'Kolhapur', zip: 416101 },
+    interestCategories: [ 'Laptop', 'Mobile', 'Food' ],
+    orders: [ { ordID: 4, prodName: 'mobile', quantity: 1, price: 15550 } ]
+  }
+]
+student> var mapfunc = function() {emit(this.age,this.address.zip)}
 
-db.Result2.find().pretty();
+student> var reducefunc = function (key,values) {return Array.sum(values)}
 
-6.] Display average price of customers whose custId is greater than 102.
-db.Orders.mapReduce(function(){emit(this.custId, this.price);}, function(key, values){return
-Array.avg(values)}, {query:{custId:{$gt:102}}, out:"Result2"})
-
-db.Result2.find().pretty();
-
-7.] Display average price of customers whose custId is equal to 102.
-db.Orders.mapReduce(function(){emit(this.custId, this.price);}, function(key, values){return
-Array.avg(values)}, {query:{custId:{$eq:102}}, out:"Result2"})
-
-db.Result2.find().pretty();
-
-db.Orders.drop();
-db.Result.drop();
-db.Result2.drop();
+student> db.customers.mapReduce(mapfunc, reducefunc, {out:myout})
+ReferenceError: myout is not defined
+student> db.customers.mapReduce(mapfunc, reducefunc, {out:"myout"})
+DeprecationWarning: Collection.mapReduce() is deprecated. Use an aggregation instead.
+See https://docs.mongodb.com/manual/core/map-reduce for details.
+{ result: 'myout', ok: 1 }
+student> db.myout.find().pretty()
+[ { _id: 21, value: 820216 } ]
+student>
