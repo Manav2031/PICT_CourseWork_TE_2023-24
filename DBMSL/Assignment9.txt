@@ -1,358 +1,118 @@
-Assignment No:09
-Title: MongoDB Queries
-Statement: MongoDB Queries using CRUD Operations(use save method and logical operators also)
-------------------------------------------------------------------------------------------------------------------------------------------
-create db and collection:- Here (db:Assignment_9) and (collection :employee)
-Assignment9> use Assignment_9;
-switched to db Assignment_9
-Assignment_9> db.createCollection("employee");
-{ ok: 1 }
-------------------------------------------------------------------------------------------------------------------------------------------
-//1)Create(Insert documents in collections)
-//A)By using insertOne:-
-Assignment_9> db.employee.insertOne({
-... _id:1,
-... fname:"Varsha",
-... lname:"Malode",
-... officecode:1,
-... jobtitle:"CEO"
-... });
-{ acknowledged: true, insertedId: 1 }
-
-//B)By using insertMany:-
-Assignment_9> db.employee.insertMany([
-...{
-... _id:2,
-... fname:"Anushka",
-... lname:"Shinde",
-... officecode:2,
-... jobtitle:"CEO"
-... },
-... {
-... _id:3,
-... fname:"Poonam",
-... lname:"Chapke",
-... officecode:1,
-... jobtitle:"CTO"
-... },
-... {
-... _id:4,
-... fname:"Shruti",
-... lname:"Maliye",
-... officecode:1,
-... jobtitle:"CTO"
-... },
-... {
-... _id:5,
-... fname:"Nikita",
-... lname:"More",
-... officecode:2,
-... jobtitle:"Data Analyst"
-... },
-... {
-... _id:6,
-... fname:"Siddhi",
-... lname:"Malode",
-... officecode:2,
-... jobtitle:"Data Analyst"
-... },
-... {
-... _id:7,
-... fname:"Riddhi",
-... lname:"Malode",
-... officecode:2,
-... jobtitle:"Sales Manager"
-... },
-... {
-... _id:8,
-... fname:"Priya",
-... lname:"Bhadke",
-... officecode:1,
-... jobtitle:"SDE"
-... },
-... {
-... _id:9,
-... fname:"Snehal",
-... lname:"Raskar",
-... officecode:1,
-... jobtitle:"SDE"
-... }
-... ]);
-{
-  acknowledged: true,
-}
-------------------------------------------------------------------------------------------------------------------------------------------
-2)Read (find Documents from collections) 
-Assignment_9> db.employee.find().pretty();
+student> db.Employee.find().pretty()
 [
   {
-    _id: 1,
-    fname: 'Varsha',
-    lname: 'Malode',
-    officecode: 1,
+    _id: ObjectId("6543d01158b108ab6a6d9740"),
+    eid: 1,
+    fname: 'Manav',
+    lname: 'Mehta',
+    officecode: 3,
     jobtitle: 'CEO'
   },
   {
-    _id: 2,
-    fname: 'Anushka',
-    lname: 'Shinde',
+    _id: ObjectId("6543d0bc58b108ab6a6d9741"),
+    eid: 2,
+    fname: 'Rutwik',
+    lname: 'Malav',
     officecode: 2,
     jobtitle: 'CEO'
   },
   {
-    _id: 3,
-    fname: 'Poonam',
-    lname: 'Chapke',
-    officecode: 1,
+    _id: ObjectId("6543d0bc58b108ab6a6d9742"),
+    eid: 3,
+    fname: 'Varad',
+    lname: 'Pundlik',
+    officecode: 3,
     jobtitle: 'CTO'
   },
   {
-    _id: 4,
-    fname: 'Shruti',
-    lname: 'Maliye',
-    officecode: 1,
-    jobtitle: 'CTO'
-  },
-  {
-    _id: 5,
-    fname: 'Nikita',
-    lname: 'More',
+    _id: ObjectId("6543d0bc58b108ab6a6d9743"),
+    eid: 4,
+    fname: 'Divyank',
+    lname: 'Sagvekar',
     officecode: 2,
     jobtitle: 'Data Analyst'
   },
   {
-    _id: 6,
-    fname: 'Siddhi',
-    lname: 'Malode',
+    _id: ObjectId("65450e1c8794e6913336eee4"),
+    eid: 5,
+    fname: 'Aahan',
+    lname: 'Rembersu',
+    officecode: 3,
+    jobtitle: 'Data Engineer'
+  }
+]
+student> db.Employee.find({officecode:{$not:{$eq:3}}})
+[
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9741"),
+    eid: 2,
+    fname: 'Rutwik',
+    lname: 'Malav',
+    officecode: 2,
+    jobtitle: 'CEO'
+  },
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9743"),
+    eid: 4,
+    fname: 'Divyank',
+    lname: 'Sagvekar',
     officecode: 2,
     jobtitle: 'Data Analyst'
-  },
-  {
-    _id: 7,
-    fname: 'Riddhi',
-    lname: 'Malode',
-    officecode: 2,
-    jobtitle: 'Sales Manager'
-  },
-  {
-    _id: 8,
-    fname: 'Priya',
-    lname: 'Bhadke',
-    officecode: 1,
-    jobtitle: 'SDE'
-  },
-  {
-    _id: 9,
-    fname: 'Snehal',
-    lname: 'Raskar',
-    officecode: 1,
-    jobtitle: 'SDE'
   }
 ]
-
-------------------------------------------------------------------------------------------------------------------------------------------
-3)Read (find documents using and operator)
-Assignment_9> db.employee.find({$and:[{'officecode':2},{'jobtitle':'CEO'}]});
-[
-  {
-    _id: 2,
-    fname: 'Anushka',
-    lname: 'Shinde',
-    officecode: 2,
-    jobtitle: 'CEO'
-  }
-]
-Assignment_9> db.employee.find({$and:[{'officecode':1},{'jobtitle':'SDE'}]});
-[
-  {
-    _id: 8,
-    fname: 'Priya',
-    lname: 'Bhadke',
-    officecode: 1,
-    jobtitle: 'SDE'
-  },
-  {
-    _id: 9,
-    fname: 'Snehal',
-    lname: 'Raskar',
-    officecode: 1,
-    jobtitle: 'SDE'
-  }
-]
-------------------------------------------------------------------------------------------------------------------------------------------
-4)Read (find documents using OR operator)
-Assignment_9> db.employee.find({$or:[{'lname':'Malode'},{'jobtitle':'CEO'}]});
-[
-  {
-    _id: 1,
-    fname: 'Varsha',
-    lname: 'Malode',
-    officecode: 1,
-    jobtitle: 'CEO'
-  },
-  {
-    _id: 2,
-    fname: 'Anushka',
-    lname: 'Shinde',
-    officecode: 2,
-    jobtitle: 'CEO'
-  },
-  {
-    _id: 6,
-    fname: 'Siddhi',
-    lname: 'Malode',
-    officecode: 2,
-    jobtitle: 'Data Analyst'
-  },
-  {
-    _id: 7,
-    fname: 'Riddhi',
-    lname: 'Malode',
-    officecode: 2,
-    jobtitle: 'Sales Manager'
-  }
-]
-------------------------------------------------------------------------------------------------------------------------------------------
-5)Read (find documents using not operator)
-Assignment_9> db.employee.find({'officecode':{$not:{$eq:2}}});
-[
-  {
-    _id: 1,
-    fname: 'Varsha',
-    lname: 'Malode',
-    officecode: 1,
-    jobtitle: 'CEO'
-  },
-  {
-    _id: 3,
-    fname: 'Poonam',
-    lname: 'Chapke',
-    officecode: 1,
-    jobtitle: 'CTO'
-  },
-  {
-    _id: 4,
-    fname: 'Shruti',
-    lname: 'Maliye',
-    officecode: 1,
-    jobtitle: 'CTO'
-  },
-  {
-    _id: 8,
-    fname: 'Priya',
-    lname: 'Bhadke',
-    officecode: 1,
-    jobtitle: 'SDE'
-  },
-  {
-    _id: 9,
-    fname: 'Snehal',
-    lname: 'Raskar',
-    officecode: 1,
-    jobtitle: 'SDE'
-  }
-]
-------------------------------------------------------------------------------------------------------------------------------------------
-6)Update (use set operator to update documents)
-Assignment_9> db.employee.update({'officecode':2},{$set:{'officecode':3}},{multi:true});
+student> db.Employee.update({officecode:3},{$set:{officecode:1}},{multi:true})
+DeprecationWarning: Collection.update() is deprecated. Use updateOne, updateMany, or bulkWrite.
 {
   acknowledged: true,
   insertedId: null,
-  matchedCount: 0,
-  modifiedCount: 0,
+  matchedCount: 3,
+  modifiedCount: 3,
   upsertedCount: 0
 }
-
-Assignment_9> db.employee.find().pretty();
+student> db.Employee.find().pretty()
 [
   {
-    _id: 1,
-    fname: 'Varsha',
-    lname: 'Malode',
+    _id: ObjectId("6543d01158b108ab6a6d9740"),
+    eid: 1,
+    fname: 'Manav',
+    lname: 'Mehta',
     officecode: 1,
     jobtitle: 'CEO'
   },
   {
-    _id: 2,
-    fname: 'Anushka',
-    lname: 'Shinde',
-    officecode: 3,
+    _id: ObjectId("6543d0bc58b108ab6a6d9741"),
+    eid: 2,
+    fname: 'Rutwik',
+    lname: 'Malav',
+    officecode: 2,
     jobtitle: 'CEO'
   },
   {
-    _id: 3,
-    fname: 'Poonam',
-    lname: 'Chapke',
+    _id: ObjectId("6543d0bc58b108ab6a6d9742"),
+    eid: 3,
+    fname: 'Varad',
+    lname: 'Pundlik',
     officecode: 1,
     jobtitle: 'CTO'
   },
   {
-    _id: 4,
-    fname: 'Shruti',
-    lname: 'Maliye',
-    officecode: 1,
-    jobtitle: 'CTO'
-  },
-  {
-    _id: 5,
-    fname: 'Nikita',
-    lname: 'More',
-    officecode: 3,
+    _id: ObjectId("6543d0bc58b108ab6a6d9743"),
+    eid: 4,
+    fname: 'Divyank',
+    lname: 'Sagvekar',
+    officecode: 2,
     jobtitle: 'Data Analyst'
   },
   {
-    _id: 6,
-    fname: 'Siddhi',
-    lname: 'Malode',
-    officecode: 3,
-    jobtitle: 'Data Analyst'
-  },
-  {
-    _id: 7,
-    fname: 'Riddhi',
-    lname: 'Malode',
-    officecode: 3,
-    jobtitle: 'Sales Manager'
-  },
-  {
-    _id: 8,
-    fname: 'Priya',
-    lname: 'Bhadke',
+    _id: ObjectId("65450e1c8794e6913336eee4"),
+    eid: 5,
+    fname: 'Aahan',
+    lname: 'Rembersu',
     officecode: 1,
-    jobtitle: 'SDE'
-  },
-  {
-    _id: 9,
-    fname: 'Snehal',
-    lname: 'Raskar',
-    officecode: 1,
-    jobtitle: 'SDE'
+    jobtitle: 'Data Engineer'
   }
 ]
-------------------------------------------------------------------------------------------------------------------------------------------7)Replace one document in the collections
-Assignment_9> db.employee.replaceOne({
-... _id:9,
-... fname:'Snehal',
-... lname:'Raskar',
-... officecode:1,
-... jobtitle:'SDE'
-... },
-... {
-... _id:9,
-... fname:'Snehal',
-... lname:'Raskar',
-... officecode:2,
-... jobtitle:'Data Analyst'
-... });
-****OR***
-Assignment_9> db.employee.replaceOne(
-... {_id:9},
-... {_id:9,
-... fname:'Snehal',
-... lname:'Raskar',
-... officecode:1,
-... jobtitle:'SDE'
-... });
+student> db.Employee.replaceOne({eid:4},{jobtitle:"Data Engineer"})
 {
   acknowledged: true,
   insertedId: null,
@@ -360,280 +120,278 @@ Assignment_9> db.employee.replaceOne(
   modifiedCount: 1,
   upsertedCount: 0
 }
-Assignment_9> db.employee.find().pretty();
+student> db.Employee.find().pretty()
 [
   {
-    _id: 1,
-    fname: 'Varsha',
-    lname: 'Malode',
+    _id: ObjectId("6543d01158b108ab6a6d9740"),
+    eid: 1,
+    fname: 'Manav',
+    lname: 'Mehta',
     officecode: 1,
     jobtitle: 'CEO'
   },
   {
-    _id: 2,
-    fname: 'Anushka',
-    lname: 'Shinde',
-    officecode: 3,
-    jobtitle: 'CEO'
-  },
-  {
-    _id: 3,
-    fname: 'Poonam',
-    lname: 'Chapke',
-    officecode: 1,
-    jobtitle: 'CTO'
-  },
-  {
-    _id: 4,
-    fname: 'Shruti',
-    lname: 'Maliye',
-    officecode: 1,
-    jobtitle: 'CTO'
-  },
-  {
-    _id: 5,
-    fname: 'Nikita',
-    lname: 'More',
-    officecode: 3,
-    jobtitle: 'Data Analyst'
-  },
-  {
-    _id: 6,
-    fname: 'Siddhi',
-    lname: 'Malode',
-    officecode: 3,
-    jobtitle: 'Data Analyst'
-  },
-  {
-    _id: 7,
-    fname: 'Riddhi',
-    lname: 'Malode',
-    officecode: 3,
-    jobtitle: 'Sales Manager'
-  },
-  {
-    _id: 8,
-    fname: 'Priya',
-    lname: 'Bhadke',
-    officecode: 1,
-    jobtitle: 'SDE'
-  },
-  {
-    _id: 9,
-    fname: 'Snehal',
-    lname: 'Raskar',
+    _id: ObjectId("6543d0bc58b108ab6a6d9741"),
+    eid: 2,
+    fname: 'Rutwik',
+    lname: 'Malav',
     officecode: 2,
-    jobtitle: 'Data Analyst'
+    jobtitle: 'CEO'
+  },
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9742"),
+    eid: 3,
+    fname: 'Varad',
+    lname: 'Pundlik',
+    officecode: 1,
+    jobtitle: 'CTO'
+  },
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9743"),
+    jobtitle: 'Data Engineer'
+  },
+  {
+    _id: ObjectId("65450e1c8794e6913336eee4"),
+    eid: 5,
+    fname: 'Aahan',
+    lname: 'Rembersu',
+    officecode: 1,
+    jobtitle: 'Data Engineer'
   }
 ]
-------------------------------------------------------------------------------------------------------------------------------------------
-8)Apply limit to find/Read documents 
-Assignment_9> db.employee.find().limit(5).pretty();
+student> db.Employee.replaceOne({eid:4},{jobtitle:"Data Engineer"})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+student> db.Employee.replaceOne({eid:4},{jobtitle:"Data Engineer"})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+student> db.Employee.find().limit(4).pretty()
 [
   {
-    _id: 1,
-    fname: 'Varsha',
-    lname: 'Malode',
+    _id: ObjectId("6543d01158b108ab6a6d9740"),
+    eid: 1,
+    fname: 'Manav',
+    lname: 'Mehta',
     officecode: 1,
     jobtitle: 'CEO'
   },
   {
-    _id: 2,
-    fname: 'Anushka',
-    lname: 'Shinde',
-    officecode: 3,
+    _id: ObjectId("6543d0bc58b108ab6a6d9741"),
+    eid: 2,
+    fname: 'Rutwik',
+    lname: 'Malav',
+    officecode: 2,
     jobtitle: 'CEO'
   },
   {
-    _id: 3,
-    fname: 'Poonam',
-    lname: 'Chapke',
+    _id: ObjectId("6543d0bc58b108ab6a6d9742"),
+    eid: 3,
+    fname: 'Varad',
+    lname: 'Pundlik',
     officecode: 1,
     jobtitle: 'CTO'
   },
   {
-    _id: 4,
-    fname: 'Shruti',
-    lname: 'Maliye',
-    officecode: 1,
-    jobtitle: 'CTO'
+    _id: ObjectId("6543d0bc58b108ab6a6d9743"),
+    jobtitle: 'Data Engineer'
   }
 ]
-------------------------------------------------------------------------------------------------------------------------------------------
-9)sort the documents
-Assignment_9> db.employee.find({}).sort({'fname':1}).pretty();
+student> db.Employee.find().limit(3).pretty()
 [
   {
-    _id: 2,
-    fname: 'Anushka',
-    lname: 'Shinde',
-    officecode: 3,
+    _id: ObjectId("6543d01158b108ab6a6d9740"),
+    eid: 1,
+    fname: 'Manav',
+    lname: 'Mehta',
+    officecode: 1,
+    jobtitle: 'CEO'
+  },
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9741"),
+    eid: 2,
+    fname: 'Rutwik',
+    lname: 'Malav',
+    officecode: 2,
     jobtitle: 'CEO'
   },
   {
-    _id: 5,
-    fname: 'Nikita',
-    lname: 'More',
-    officecode: 3,
-    jobtitle: 'Data Analyst'
-  },
-  {
-    _id: 3,
-    fname: 'Poonam',
-    lname: 'Chapke',
+    _id: ObjectId("6543d0bc58b108ab6a6d9742"),
+    eid: 3,
+    fname: 'Varad',
+    lname: 'Pundlik',
     officecode: 1,
     jobtitle: 'CTO'
-  },
-  {
-    _id: 8,
-    fname: 'Priya',
-    lname: 'Bhadke',
-    officecode: 1,
-    jobtitle: 'SDE'
-  },
-  {
-    _id: 7,
-    fname: 'Riddhi',
-    lname: 'Malode',
-    officecode: 3,
-    jobtitle: 'Sales Manager'
-  },
-  {
-    _id: 4,
-    fname: 'Shruti',
-    lname: 'Maliye',
-    officecode: 1,
-    jobtitle: 'CTO'
-  },
-  {
-    _id: 6,
-    fname: 'Siddhi',
-    lname: 'Malode',
-    officecode: 3,
-    jobtitle: 'Data Analyst'
-  },
-  {
-    _id: 9,
-    fname: 'Snehal',
-    lname: 'Raskar',
-    officecode: 1,
-    jobtitle: 'SDE'
-  },
-  {
-    _id: 1,
-    fname: 'Varsha',
-    lname: 'Malode',
-    officecode: 1,
-    jobtitle: 'CEO'
   }
 ]
-------------------------------------------------------------------------------------------------------------------------------------------10)Deletion of documents from collections
-A)Delete one document
-Assignment_9> db.employee.deleteOne({_id:9});
+student> db.Employee.sort({fname:1}).pretty()
+TypeError: db.Employee.sort is not a function
+student> db.Employee.find().sort({fname:1}).pretty()
+[
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9743"),
+    jobtitle: 'Data Engineer'
+  },
+  {
+    _id: ObjectId("65450e1c8794e6913336eee4"),
+    eid: 5,
+    fname: 'Aahan',
+    lname: 'Rembersu',
+    officecode: 1,
+    jobtitle: 'Data Engineer'
+  },
+  {
+    _id: ObjectId("6543d01158b108ab6a6d9740"),
+    eid: 1,
+    fname: 'Manav',
+    lname: 'Mehta',
+    officecode: 1,
+    jobtitle: 'CEO'
+  },
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9741"),
+    eid: 2,
+    fname: 'Rutwik',
+    lname: 'Malav',
+    officecode: 2,
+    jobtitle: 'CEO'
+  },
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9742"),
+    eid: 3,
+    fname: 'Varad',
+    lname: 'Pundlik',
+    officecode: 1,
+    jobtitle: 'CTO'
+  }
+]
+student> db.Employee.find({}).sort({fname:1}).pretty()
+[
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9743"),
+    jobtitle: 'Data Engineer'
+  },
+  {
+    _id: ObjectId("65450e1c8794e6913336eee4"),
+    eid: 5,
+    fname: 'Aahan',
+    lname: 'Rembersu',
+    officecode: 1,
+    jobtitle: 'Data Engineer'
+  },
+  {
+    _id: ObjectId("6543d01158b108ab6a6d9740"),
+    eid: 1,
+    fname: 'Manav',
+    lname: 'Mehta',
+    officecode: 1,
+    jobtitle: 'CEO'
+  },
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9741"),
+    eid: 2,
+    fname: 'Rutwik',
+    lname: 'Malav',
+    officecode: 2,
+    jobtitle: 'CEO'
+  },
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9742"),
+    eid: 3,
+    fname: 'Varad',
+    lname: 'Pundlik',
+    officecode: 1,
+    jobtitle: 'CTO'
+  }
+]
+student> db.Employee.deleteOne({eid:5})
 { acknowledged: true, deletedCount: 1 }
-Assignment_9> db.employee.find().pretty();
+student> db.Employee.find().pretty()
 [
   {
-    _id: 1,
-    fname: 'Varsha',
-    lname: 'Malode',
+    _id: ObjectId("6543d01158b108ab6a6d9740"),
+    eid: 1,
+    fname: 'Manav',
+    lname: 'Mehta',
     officecode: 1,
     jobtitle: 'CEO'
   },
   {
-    _id: 2,
-    fname: 'Anushka',
-    lname: 'Shinde',
-    officecode: 3,
+    _id: ObjectId("6543d0bc58b108ab6a6d9741"),
+    eid: 2,
+    fname: 'Rutwik',
+    lname: 'Malav',
+    officecode: 2,
     jobtitle: 'CEO'
   },
   {
-    _id: 3,
-    fname: 'Poonam',
-    lname: 'Chapke',
+    _id: ObjectId("6543d0bc58b108ab6a6d9742"),
+    eid: 3,
+    fname: 'Varad',
+    lname: 'Pundlik',
     officecode: 1,
     jobtitle: 'CTO'
   },
   {
-    _id: 4,
-    fname: 'Shruti',
-    lname: 'Maliye',
-    officecode: 1,
-    jobtitle: 'CTO'
-  },
-  {
-    _id: 5,
-    fname: 'Nikita',
-    lname: 'More',
-    officecode: 3,
-    jobtitle: 'Data Analyst'
-  },
-  {
-    _id: 6,
-    fname: 'Siddhi',
-    lname: 'Malode',
-    officecode: 3,
-    jobtitle: 'Data Analyst'
-  },
-  {
-    _id: 7,
-    fname: 'Riddhi',
-    lname: 'Malode',
-    officecode: 3,
-    jobtitle: 'Sales Manager'
-  },
-  {
-    _id: 8,
-    fname: 'Priya',
-    lname: 'Bhadke',
-    officecode: 1,
-    jobtitle: 'SDE'
+    _id: ObjectId("6543d0bc58b108ab6a6d9743"),
+    jobtitle: 'Data Engineer'
   }
 ]
-
-B)Delete many documents from collections
-Assignment_9> db.employee.deleteMany({officecode:3});
-{ acknowledged: true, deletedCount: 4 }
-Assignment_9> db.employee.find().pretty();
+student> db.Employee.deleteOne({jobtitle:"Data Engineer"})
+{ acknowledged: true, deletedCount: 1 }
+student> db.Employee.find().pretty()
 [
   {
-    _id: 1,
-    fname: 'Varsha',
-    lname: 'Malode',
+    _id: ObjectId("6543d01158b108ab6a6d9740"),
+    eid: 1,
+    fname: 'Manav',
+    lname: 'Mehta',
     officecode: 1,
     jobtitle: 'CEO'
   },
   {
-    _id: 3,
-    fname: 'Poonam',
-    lname: 'Chapke',
-    officecode: 1,
-    jobtitle: 'CTO'
+    _id: ObjectId("6543d0bc58b108ab6a6d9741"),
+    eid: 2,
+    fname: 'Rutwik',
+    lname: 'Malav',
+    officecode: 2,
+    jobtitle: 'CEO'
   },
   {
-    _id: 4,
-    fname: 'Shruti',
-    lname: 'Maliye',
+    _id: ObjectId("6543d0bc58b108ab6a6d9742"),
+    eid: 3,
+    fname: 'Varad',
+    lname: 'Pundlik',
     officecode: 1,
     jobtitle: 'CTO'
-  },
-  {
-    _id: 8,
-    fname: 'Priya',
-    lname: 'Bhadke',
-    officecode: 1,
-    jobtitle: 'SDE'
   }
 ]
+student> db.Employee.deleteMany({officecode:1})
+{ acknowledged: true, deletedCount: 2 }
+student> db.Employee.find().pretty()
+[
+  {
+    _id: ObjectId("6543d0bc58b108ab6a6d9741"),
+    eid: 2,
+    fname: 'Rutwik',
+    lname: 'Malav',
+    officecode: 2,
+    jobtitle: 'CEO'
+  }
+]
+student> db.Employee.deleteMany()
+MongoshInvalidInputError: [COMMON-10001] Missing required argument at position 0 (Collection.deleteMany)
+student> db.Employee.deleteMany({})
+{ acknowledged: true, deletedCount: 1 }
+student> db.Employee.find().pretty()
 
-C)Delete all documents from collections
-Assignment_9> db.employee.deleteMany({});
-{ acknowledged: true, deletedCount: 5 }
-Assignment_9> db.employee.find().pretty();
-
-Assignment__9>
-----------------------------------------------------------***The End***-------------------------------------------------------------------
-
-
-
-
+student>
