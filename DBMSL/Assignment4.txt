@@ -1,0 +1,56 @@
+B) Areas 
+
+mysql> delimiter //
+mysql> create procedure areaCalc(in radius float)
+    -> begin
+    -> declare area float;
+    -> declare exit handler for SQLSTATE '43250'
+    -> begin
+    -> select 'Radius<5 or Radius>9 is not allowed' as Exception;
+    -> end;
+    -> if(radius<5 or radius>9) then
+    -> SIGNAL SQLSTATE '43250';
+    -> else
+    -> set area=3.14*radius*radius;
+    -> insert into Areas values(radius,area);
+    -> end if;
+    -> end//
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> delimiter ;
+mysql> call areaCalc(5);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> call areaCalc(4);
++-------------------------------------+
+| Exception                           |
++-------------------------------------+
+| Radius<5 or Radius>9 is not allowed |
++-------------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call areaCalc(9);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> call areaCalc(10);
++-------------------------------------+
+| Exception                           |
++-------------------------------------+
+| Radius<5 or Radius>9 is not allowed |
++-------------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from Areas;
++--------+--------+
+| radius | area   |
++--------+--------+
+|      5 |   78.5 |
+|      9 | 254.34 |
++--------+--------+
+2 rows in set (0.00 sec)
+
+mysql>
