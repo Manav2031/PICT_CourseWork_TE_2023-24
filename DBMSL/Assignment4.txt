@@ -1,5 +1,8 @@
 B) Areas 
 
+mysql> create table Areas(radius float primary key, area float);
+Query OK, 0 rows affected (0.02 sec)
+
 mysql> delimiter //
 mysql> create procedure areaCalc(in radius float)
     -> begin
