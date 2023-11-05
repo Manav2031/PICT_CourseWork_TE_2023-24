@@ -1,348 +1,188 @@
-Assignment No:10
-Title: MongoDB-Aggregation and Indexing 
-Statement: Design and Develop MongoDB Queries using aggregation and indexing with suitable examples using MongoDB
-------------------------------------------------------------------------------------------------------------------------------------------
-create db and collection:- Here (db:Assignment_10) and (collectiona :student and teachers)
-Assignment9> use Assignment_10;
-switched to db Assignment_10
-Assignment_10> db.createCollection("student");
-{ ok: 1 }
-Assignment_10> db.createCollection("teachers");
-{ ok: 1 }
-Assignment_10> show collections;
-student
-teachers
-------------------------------------------------------------------------------------------------------------------------------------------
-1)Insert documents in student  collection
-Assignment_10> db.student.insertMany([
-... {
-... _id:1,
-... rollNo:101,
-... regNo:201,
-... name:'Varsha',
-... dept:'Computer',
-... marks:[95,90,92,91,93]
-... },
-... {
-... _id:2,
-... rollNo:102,
-... regNo:202,
-... name:'Anushka',
-... dept:'Civil',
-... marks:[92,91,92,91,90]
-... },
-... {
-... _id:3,
-... rollNo:103,
-... regNo:203,
-... name:'Akshata',
-... dept:'ENTC',
-... marks:[90,98,97,96,99]
-... },
-... {
-... _id:4,
-... rollNo:104,
-... regNo:204,
-... name:'Geeta',
-... dept:'IT',
-... marks:[95,94,93,90,90]
-... },
-... {
-... _id:5,
-... rollNo:105,
-... regNo:205,
-... name:'Sampada',
-... dept:'Mechanical',
-... marks:[92,98,94,96,93]
-... },
-... {
-... _id:6,
-... rollNo:106,
-... regNo:206,
-... name:'Shruti',
-... dept:'Electrical',
-... marks:[98,96,94,93,92]
-... },
-... {
-... _id:7,
-... rollNo:107,
-... regNo:207,
-... name:'Poonam',
-... dept:'Civil',
-... marks:[98,99,97,93,92]
-... },
-... {
-... _id:8,
-... rollNo:108,
-... regNo:208,
-... name:'Afrin',
-... dept:'IT',
-... marks:[90,90,90,96,92]
-... },
-... {
-... _id:9,
-... rollNo:109,
-... regNo:209,
-... name:'Nikita',
-... dept:'Mechanical',
-... marks:[91,92,93,94,95]
-... },
-... {
-... _id:10,
-... rollNo:110,
-... regNo:210,
-... name:'Saniya',
-... dept:'Computer',
-... marks:[99,98,97,96,95]
-... }]);
+student> db.studentdata.find().pretty()
+[
+  {
+    _id: ObjectId("6546870c001ced33d907b1ce"),
+    name: 'Manav',
+    marks: 150,
+    age: 20
+  },
+  {
+    _id: ObjectId("6546870c001ced33d907b1cf"),
+    name: 'Madhushri',
+    marks: 200,
+    age: 19
+  },
+  {
+    _id: ObjectId("6546870c001ced33d907b1d0"),
+    name: 'Rutwik',
+    marks: 170,
+    age: 19
+  }
+]
+student> db.studentdata.count()
+DeprecationWarning: Collection.count() is deprecated. Use countDocuments or estimatedDocumentCount.
+3
+student> db.studentdata.count()
+3
+student> db.studentdata.insertOne({name:"Manav",marks:250,age:20})
 {
   acknowledged: true,
-  insertedIds: {
-    '0': 1,
-    '1': 2,
-    '2': 3,
-    '3': 4,
-    '4': 5,
-    '5': 6,
-    '6': 7,
-    '7': 8,
-    '8': 9,
-    '9': 10
-  }
+  insertedId: ObjectId("65471a09c1ea805801069cdd")
 }
-Assignment_10> db.student.find().pretty();
+student> db.studentdata.find().pretty()
 [
   {
-    _id: 1,
-    rollNo: 101,
-    regNo: 201,
-    name: 'Varsha',
-    dept: 'Computer',
-    marks: [ 95, 90, 92, 91, 93 ]
+    _id: ObjectId("6546870c001ced33d907b1ce"),
+    name: 'Manav',
+    marks: 150,
+    age: 20
   },
   {
-    _id: 2,
-    rollNo: 102,
-    regNo: 202,
-    name: 'Anushka',
-    dept: 'Civil',
-    marks: [ 92, 91, 92, 91, 90 ]
+    _id: ObjectId("6546870c001ced33d907b1cf"),
+    name: 'Madhushri',
+    marks: 200,
+    age: 19
   },
   {
-    _id: 3,
-    rollNo: 103,
-    regNo: 203,
-    name: 'Akshata',
-    dept: 'ENTC',
-    marks: [ 90, 98, 97, 96, 99 ]
+    _id: ObjectId("6546870c001ced33d907b1d0"),
+    name: 'Rutwik',
+    marks: 170,
+    age: 19
   },
   {
-    _id: 4,
-    rollNo: 104,
-    regNo: 204,
-    name: 'Geeta',
-    dept: 'IT',
-    marks: [ 95, 94, 93, 90, 90 ]
-  },
-  {
-    _id: 5,
-    rollNo: 105,
-    regNo: 205,
-    name: 'Sampada',
-    dept: 'Mechanical',
-    marks: [ 92, 98, 94, 96, 93 ]
-  },
-  {
-    _id: 6,
-    rollNo: 106,
-    regNo: 206,
-    name: 'Shruti',
-    dept: 'Electrical',
-    marks: [ 98, 96, 94, 93, 92 ]
-  },
-  {
-    _id: 7,
-    rollNo: 107,
-    regNo: 207,
-    name: 'Poonam',
-    dept: 'Civil',
-    marks: [ 98, 99, 97, 93, 92 ]
-  },
-  {
-    _id: 8,
-    rollNo: 108,
-    regNo: 208,
-    name: 'Afrin',
-    dept: 'IT',
-    marks: [ 90, 90, 90, 96, 92 ]
-  },
-  {
-    _id: 9,
-    rollNo: 109,
-    regNo: 209,
-    name: 'Nikita',
-    dept: 'Mechanical',
-    marks: [ 91, 92, 93, 94, 95 ]
-  },
-  {
-    _id: 10,
-    rollNo: 110,
-    regNo: 210,
-    name: 'Saniya',
-    dept: 'Computer',
-    marks: [ 99, 98, 97, 96, 95 ]
+    _id: ObjectId("65471a09c1ea805801069cdd"),
+    name: 'Manav',
+    marks: 250,
+    age: 20
   }
 ]
---------------------------------------------------------****Indexing Query****------------------------------------------------------------
-2)Create single field index 
-Assignment_10> db.student.createIndex({rollNO:1});
-rollNO_1
-------------------------------------------------------------------------------------------------------------------------------------------
-3)Display the information of  created index
-Assignment_10> db.student.getIndexes();
+student> db.studentdata.distinct("name")
+[ 'Madhushri', 'Manav', 'Rutwik' ]
+student> db.studentdata.aggregate({$project:{name:1,marks:1}})
 [
-  { v: 2, key: { _id: 1 }, name: '_id_' },
-  { v: 2, key: { rollNO: 1 }, name: 'rollNO_1' }
+  {
+    _id: ObjectId("6546870c001ced33d907b1ce"),
+    name: 'Manav',
+    marks: 150
+  },
+  {
+    _id: ObjectId("6546870c001ced33d907b1cf"),
+    name: 'Madhushri',
+    marks: 200
+  },
+  {
+    _id: ObjectId("6546870c001ced33d907b1d0"),
+    name: 'Rutwik',
+    marks: 170
+  },
+  {
+    _id: ObjectId("65471a09c1ea805801069cdd"),
+    name: 'Manav',
+    marks: 250
+  }
 ]
-------------------------------------------------------------------------------------------------------------------------------------------
-4)create compound filed index
-Assignment_10> db.student.createIndex({rollNo:-1,regNo:1})
-rollNo_-1_regNo_1
-Assignment_10> db.student.getIndexes();
+student> db.studentdata.aggregate({$project:{name:1}})
 [
-  { v: 2, key: { _id: 1 }, name: '_id_' },
-  { v: 2, key: { rollNO: 1 }, name: 'rollNO_1' },
-  { v: 2, key: { rollNo: -1, regNo: 1 }, name: 'rollNo_-1_regNo_1' }
+  { _id: ObjectId("6546870c001ced33d907b1ce"), name: 'Manav' },
+  { _id: ObjectId("6546870c001ced33d907b1cf"), name: 'Madhushri' },
+  { _id: ObjectId("6546870c001ced33d907b1d0"), name: 'Rutwik' },
+  { _id: ObjectId("65471a09c1ea805801069cdd"), name: 'Manav' }
 ]
-------------------------------------------------------------------------------------------------------------------------------------------
-5)To drop single field index
-Assignment_10> db.student.dropIndexes({rollNO:1});
-{ nIndexesWas: 3, ok: 1 }
-Assignment_10> db.student.getIndexes()
+student> db.studentdata.aggregate({$project:{name:1}}).pretty()
 [
-  { v: 2, key: { _id: 1 }, name: '_id_' },
-  { v: 2, key: { rollNo: -1, regNo: 1 }, name: 'rollNo_-1_regNo_1' }
+  { _id: ObjectId("6546870c001ced33d907b1ce"), name: 'Manav' },
+  { _id: ObjectId("6546870c001ced33d907b1cf"), name: 'Madhushri' },
+  { _id: ObjectId("6546870c001ced33d907b1d0"), name: 'Rutwik' },
+  { _id: ObjectId("65471a09c1ea805801069cdd"), name: 'Manav' }
 ]
-------------------------------------------------------------------------------------------------------------------------------------------6)to drop compound field index
-Assignment_10> db.student.dropIndexes({rollNo:-1,regNo:1});
-{ nIndexesWas: 2, ok: 1 }
-Assignment_10> db.student.getIndexes();
-[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
-------------------------------------------------------------------------------------------------------------------------------------------7)create unique field index
-Assignment_10> db.student.createIndex({rollNo:1},{unique:true});
-rollNo_1
-Assignment_10> db.student.getIndexes();
+student> db.studentdata.aggregate({$project:{"name":1}})
 [
-  { v: 2, key: { _id: 1 }, name: '_id_' },
-  { v: 2, key: { rollNo: 1 }, name: 'rollNo_1', unique: true }
+  { _id: ObjectId("6546870c001ced33d907b1ce"), name: 'Manav' },
+  { _id: ObjectId("6546870c001ced33d907b1cf"), name: 'Madhushri' },
+  { _id: ObjectId("6546870c001ced33d907b1d0"), name: 'Rutwik' },
+  { _id: ObjectId("65471a09c1ea805801069cdd"), name: 'Manav' }
 ]
-------------------------------------------------------------------------------------------------------------------------------------------8) Search operation without index
-Assignment_10> db.student.find({name:'Varsha'}).explain("executionStats");
-{
-  explainVersion: '2',
-  queryPlanner: {
-    namespace: 'Assignment_10.student',
-    indexFilterSet: false,
-    parsedQuery: { name: { '$eq': 'Varsha' } },
-    queryHash: '1AD872C6',
-    planCacheKey: '8FB87930',
-    maxIndexedOrSolutionsReached: false,
-    maxIndexedAndSolutionsReached: false,
-    maxScansToExplodeReached: false,
-    winningPlan: {
-      queryPlan: {
-        stage: 'COLLSCAN',
-        planNodeId: 1,
-        filter: { name: { '$eq': 'Varsha' } },
-        direction: 'forward'
-      },
-      slotBasedPlan: {
-        slots: '$$RESULT=s5 env: { s1 = TimeZoneDatabase(America/Kralendijk...America/Cordoba) (timeZoneDB), s2 = Nothing (SEARCH_META), s3 = 1698690853927 (NOW), s7 = "Varsha" }',
-        stages: '[1] filter {traverseF(s4, lambda(l1.0) { ((l1.0 == s7) ?: false) }, false)} \n' +
-          '[1] scan s5 s6 none none none none lowPriority [s4 = name] @"5649e0f3-1f50-4840-b26f-75b764712823" true false '
-      }
-    },
-    rejectedPlans: []
+student> db.studentdata.aggregate({$group:{_id:name,totalmarks:{$sum:marks}}})
+ReferenceError: name is not defined
+student> db.studentdata.aggregate({$group:{_id:$name,totalmarks:{$sum:$marks}}})
+ReferenceError: $name is not defined
+student> db.studentdata.aggregate({$group:{_id:"$name",totalmarks:{$sum:"$marks"}}})
+[
+  { _id: 'Madhushri', totalmarks: 200 },
+  { _id: 'Rutwik', totalmarks: 170 },
+  { _id: 'Manav', totalmarks: 400 }
+]
+student> db.studentdata.aggregate({$group:{_id:"$name",count:{$sum:1}}})
+[
+  { _id: 'Madhushri', count: 1 },
+  { _id: 'Rutwik', count: 1 },
+  { _id: 'Manav', count: 2 }
+]
+student> db.studentdata.find().pretty()
+[
+  {
+    _id: ObjectId("6546870c001ced33d907b1ce"),
+    name: 'Manav',
+    marks: 150,
+    age: 20
   },
-  executionStats: {
-    executionSuccess: true,
-    nReturned: 1,
-    executionTimeMillis: 6,
-    totalKeysExamined: 0,
-    totalDocsExamined: 10,
-    executionStages: {
-      stage: 'filter',
-      planNodeId: 1,
-      nReturned: 1,
-      executionTimeMillisEstimate: 0,
-      opens: 1,
-      closes: 1,
-      saveState: 0,
-      restoreState: 0,
-      isEOF: 1,
-      numTested: 10,
-      filter: 'traverseF(s4, lambda(l1.0) { ((l1.0 == s7) ?: false) }, false) ',
-      inputStage: {
-        stage: 'scan',
-        planNodeId: 1,
-        nReturned: 10,
-        executionTimeMillisEstimate: 0,
-        opens: 1,
-        closes: 1,
-        saveState: 0,
-        restoreState: 0,
-        isEOF: 1,
-        numReads: 10,
-        recordSlot: 5,
-        recordIdSlot: 6,
-        fields: [ 'name' ],
-        outputSlots: [ Long("4") ]
-      }
-    }
+  {
+    _id: ObjectId("6546870c001ced33d907b1cf"),
+    name: 'Madhushri',
+    marks: 200,
+    age: 19
   },
-  command: {
-    find: 'student',
-    filter: { name: 'Varsha' },
-    '$db': 'Assignment_10'
+  {
+    _id: ObjectId("6546870c001ced33d907b1d0"),
+    name: 'Rutwik',
+    marks: 170,
+    age: 19
   },
-  serverInfo: {
-    host: 'Var7083sha',
-    port: 27017,
-    version: '7.0.2',
-    gitVersion: '02b3c655e1302209ef046da6ba3ef6749dd0b62a'
-  },
-  serverParameters: {
-    internalQueryFacetBufferSizeBytes: 104857600,
-    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
-    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
-    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
-    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
-    internalQueryProhibitBlockingMergeOnMongoS: 0,
-    internalQueryMaxAddToSetBytes: 104857600,
-    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
-    internalQueryFrameworkControl: 'trySbeEngine'
-  },
-  ok: 1
-}
-------------------------------------------------------------------------------------------------------------------------------------------
- 9)search operation after creating index on name colum
-Assignment_10> db.student.createIndex({'name':1});
+  {
+    _id: ObjectId("65471a09c1ea805801069cdd"),
+    name: 'Manav',
+    marks: 250,
+    age: 20
+  }
+]
+student> db.studentdata.aggregate([{$match:{age:{$eq:19}}},{$group:{_id:"$name",totalmarks:{$sum:"$marks"}}},{$sort:{totalmarks:-1}}])
+[
+  { _id: 'Madhushri', totalmarks: 200 },
+  { _id: 'Rutwik', totalmarks: 170 }
+]
+student> db.studentdata.createIndex({name:1})
 name_1
-Assignment_10> db.student.getIndexes();
+student> db.studentdata.ensureIndex({age:-1})
+[ 'age_-1' ]
+student> db.studentdata.getIndexes()
 [
   { v: 2, key: { _id: 1 }, name: '_id_' },
-  { v: 2, key: { name: 1 }, name: 'name_1' }
+  { v: 2, key: { name: 1 }, name: 'name_1' },
+  { v: 2, key: { age: -1 }, name: 'age_-1' }
 ]
-Assignment_10> db.student.find({'name':'Varsha'}).explain("executionStats");
-
+student> db.student.createIndex({marks:1},{unique:true})
+marks_1
+student> db.student.createIndex({name:1},{unique:true})
+name_1
+student> db.studentdata.createIndex({marks:1},{unique:true})
+marks_1
+student> db.studentdata.createIndex({name:1},{unique:true})
+MongoServerError: An existing index has the same name as the requested index. When index names are not specified, they are auto generated and can cause conflicts. Please refer to our documentation. Requested index: { v: 2, unique: true, key: { name: 1 }, name: "name_1" }, existing index: { v: 2, key: { name: 1 }, name: "name_1" }
+student> db.studentdata.dropIndex({name:1})
+{ nIndexesWas: 4, ok: 1 }
+student> db.studentdata.createIndex({name:1},{unique:true})
+MongoServerError: Index build failed: febec8ee-e74f-4a28-98fe-339bf7b97928: Collection student.studentdata ( 4d8a4250-c944-4897-ae79-23a934d898ec ) :: caused by :: E11000 duplicate key error collection: student.studentdata index: name_1 dup key: { name: "Manav" }
+student> db.studentdata.createIndex({name:1})
+name_1
+student> db.studentdata.find({name:'Manav'}).explain("executionStats")
 {
   explainVersion: '2',
   queryPlanner: {
-    namespace: 'Assignment_10.student',
+    namespace: 'student.studentdata',
     indexFilterSet: false,
-    parsedQuery: { name: { '$eq': 'Varsha' } },
+    parsedQuery: { name: { '$eq': 'Manav' } },
     queryHash: '1AD872C6',
-    planCacheKey: '40C04BF4',
+    planCacheKey: '70473A1D',
     maxIndexedOrSolutionsReached: false,
     maxIndexedAndSolutionsReached: false,
     maxScansToExplodeReached: false,
@@ -362,54 +202,54 @@ Assignment_10> db.student.find({'name':'Varsha'}).explain("executionStats");
           isPartial: false,
           indexVersion: 2,
           direction: 'forward',
-          indexBounds: { name: [ '["Varsha", "Varsha"]' ] }
+          indexBounds: { name: [ '["Manav", "Manav"]' ] }
         }
       },
       slotBasedPlan: {
-        slots: '$$RESULT=s11 env: { s10 = {"name" : 1}, s2 = Nothing (SEARCH_META), s5 = KS(3C566172736861000104), s3 = 1698691166433 (NOW), s6 = KS(3C56617273686100FE04), s1 = TimeZoneDatabase(America/Kralendijk...America/Cordoba) (timeZoneDB) }',
+        slots: '$$RESULT=s11 env: { s1 = TimeZoneDatabase(ROK...Mexico/BajaSur) (timeZoneDB), s2 = Nothing (SEARCH_META), s5 = KS(3C4D616E6176000104), s10 = {"name" : 1}, s3 = 1699162389342 (NOW), s6 = KS(3C4D616E617600FE04) }',
         stages: '[2] nlj inner [] [s4, s7, s8, s9, s10] \n' +
           '    left \n' +
           '        [1] cfilter {(exists(s5) && exists(s6))} \n' +
-          '        [1] ixseek s5 s6 s9 s4 s7 s8 [] @"5649e0f3-1f50-4840-b26f-75b764712823" @"name_1" true \n' +
+          '        [1] ixseek s5 s6 s9 s4 s7 s8 [] @"4d8a4250-c944-4897-ae79-23a934d898ec" @"name_1" true \n' +
           '    right \n' +
           '        [2] limit 1 \n' +
-          '        [2] seek s4 s11 s12 s7 s8 s9 s10 [] @"5649e0f3-1f50-4840-b26f-75b764712823" true false \n'
+          '        [2] seek s4 s11 s12 s7 s8 s9 s10 [] @"4d8a4250-c944-4897-ae79-23a934d898ec" true false \n'
       }
     },
     rejectedPlans: []
   },
   executionStats: {
     executionSuccess: true,
-    nReturned: 1,
-    executionTimeMillis: 9,
-    totalKeysExamined: 1,
-    totalDocsExamined: 1,
+    nReturned: 2,
+    executionTimeMillis: 14,
+    totalKeysExamined: 2,
+    totalDocsExamined: 2,
     executionStages: {
       stage: 'nlj',
       planNodeId: 2,
-      nReturned: 1,
-      executionTimeMillisEstimate: 0,
+      nReturned: 2,
+      executionTimeMillisEstimate: 8,
       opens: 1,
       closes: 1,
       saveState: 0,
       restoreState: 0,
       isEOF: 1,
-      totalDocsExamined: 1,
-      totalKeysExamined: 1,
+      totalDocsExamined: 2,
+      totalKeysExamined: 2,
       collectionScans: 0,
-      collectionSeeks: 1,
+      collectionSeeks: 2,
       indexScans: 0,
       indexSeeks: 1,
       indexesUsed: [ 'name_1' ],
-      innerOpens: 1,
+      innerOpens: 2,
       innerCloses: 1,
       outerProjects: [],
       outerCorrelated: [ Long("4"), Long("7"), Long("8"), Long("9"), Long("10") ],
       outerStage: {
         stage: 'cfilter',
         planNodeId: 1,
-        nReturned: 1,
-        executionTimeMillisEstimate: 0,
+        nReturned: 2,
+        executionTimeMillisEstimate: 8,
         opens: 1,
         closes: 1,
         saveState: 0,
@@ -420,17 +260,17 @@ Assignment_10> db.student.find({'name':'Varsha'}).explain("executionStats");
         inputStage: {
           stage: 'ixseek',
           planNodeId: 1,
-          nReturned: 1,
-          executionTimeMillisEstimate: 0,
+          nReturned: 2,
+          executionTimeMillisEstimate: 8,
           opens: 1,
           closes: 1,
           saveState: 0,
           restoreState: 0,
           isEOF: 1,
           indexName: 'name_1',
-          keysExamined: 1,
+          keysExamined: 2,
           seeks: 1,
-          numReads: 2,
+          numReads: 3,
           indexKeySlot: 9,
           recordIdSlot: 4,
           snapshotIdSlot: 7,
@@ -444,9 +284,9 @@ Assignment_10> db.student.find({'name':'Varsha'}).explain("executionStats");
       innerStage: {
         stage: 'limit',
         planNodeId: 2,
-        nReturned: 1,
+        nReturned: 2,
         executionTimeMillisEstimate: 0,
-        opens: 1,
+        opens: 2,
         closes: 1,
         saveState: 0,
         restoreState: 0,
@@ -455,14 +295,14 @@ Assignment_10> db.student.find({'name':'Varsha'}).explain("executionStats");
         inputStage: {
           stage: 'seek',
           planNodeId: 2,
-          nReturned: 1,
+          nReturned: 2,
           executionTimeMillisEstimate: 0,
-          opens: 1,
+          opens: 2,
           closes: 1,
           saveState: 0,
           restoreState: 0,
           isEOF: 0,
-          numReads: 1,
+          numReads: 2,
           recordSlot: 11,
           recordIdSlot: 12,
           seekKeySlot: 4,
@@ -476,13 +316,9 @@ Assignment_10> db.student.find({'name':'Varsha'}).explain("executionStats");
       }
     }
   },
-  command: {
-    find: 'student',
-    filter: { name: 'Varsha' },
-    '$db': 'Assignment_10'
-  },
+  command: { find: 'studentdata', filter: { name: 'Manav' }, '$db': 'student' },
   serverInfo: {
-    host: 'Var7083sha',
+    host: 'manav',
     port: 27017,
     version: '7.0.2',
     gitVersion: '02b3c655e1302209ef046da6ba3ef6749dd0b62a'
@@ -500,116 +336,300 @@ Assignment_10> db.student.find({'name':'Varsha'}).explain("executionStats");
   },
   ok: 1
 }
-----------------------------------------------------------****End of Indexing***----------------------------------------------------------
-
----------------------------------------------------------***Start of Aggregation***-------------------------------------------------------
-
-**)In aggregation use this {$match:{}},{$group{}},{$sort{}}
-
-1)find the total marks using sum aggregate
-
-A)to find total marks of student collection
-Assignment_10> db.student.aggregate([
-... {$unwind:'$marks'},
-... {$group:{_id:"name",totalscore:{$sum:'$marks'}}}
-... ]);
-[ { _id: 'name', totalscore: 4692 } ]
-
-B)To find total marks of every students
-Assignment_10> db.student.aggregate([ { $unwind: '$marks' }, { $group: { _id: "$name", totalscore: { $sum: '$marks' } } }] );
+student> db.studentdata.getIndexes()
 [
-  { _id: 'Geeta', totalscore: 462 },
-  { _id: 'Poonam', totalscore: 479 },
-  { _id: 'Anushka', totalscore: 456 },
-  { _id: 'Saniya', totalscore: 485 },
-  { _id: 'Akshata', totalscore: 480 },
-  { _id: 'Afrin', totalscore: 458 },
-  { _id: 'Nikita', totalscore: 465 },
-  { _id: 'Varsha', totalscore: 461 },
-  { _id: 'Shruti', totalscore: 473 },
-  { _id: 'Sampada', totalscore: 473 }
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { age: -1 }, name: 'age_-1' },
+  { v: 2, key: { marks: 1 }, name: 'marks_1', unique: true },
+  { v: 2, key: { name: 1 }, name: 'name_1' }
 ]
-
-c)marks of total count
-Assignment_10> db.student.aggregate([ { $unwind: '$marks' }, { $group: { _id: "$name", totalscore: { $sum: 1 } } }] );
-[
-  { _id: 'Saniya', totalscore: 5 },
-  { _id: 'Geeta', totalscore: 5 },
-  { _id: 'Anushka', totalscore: 5 },
-  { _id: 'Afrin', totalscore: 5 },
-  { _id: 'Akshata', totalscore: 5 },
-  { _id: 'Shruti', totalscore: 5 },
-  { _id: 'Varsha', totalscore: 5 },
-  { _id: 'Sampada', totalscore: 5 },
-  { _id: 'Nikita', totalscore: 5 },
-  { _id: 'Poonam', totalscore: 5 }
-]
-------------------------------------------------------------------------------------------------------------------------------------------
-2)use sort to display total sum of all student
-Assignment_10> db.student.aggregate([ { $unwind: '$marks' }, { $group: { '_id': "$name", 'totalScore': { $sum: '$marks' } } }, { $sort: { 'totalscore': -1 } }] );
-[
-  { _id: 'Akshata', totalScore: 480 },
-  { _id: 'Nikita', totalScore: 465 },
-  { _id: 'Sampada', totalScore: 473 },
-  { _id: 'Poonam', totalScore: 479 },
-  { _id: 'Saniya', totalScore: 485 },
-  { _id: 'Anushka', totalScore: 456 },
-  { _id: 'Geeta', totalScore: 462 },
-  { _id: 'Shruti', totalScore: 473 },
-  { _id: 'Varsha', totalScore: 461 },
-  { _id: 'Afrin', totalScore: 458 }
-]
-------------------------------------------------------------------------------------------------------------------------------------------3)use match function 
-Assignment_10> db.student.aggregate([
-... {$unwind:'$marks'},
-... {$match:{dept:'Computer'}},
-... {$group:{_id:'$rollNo',totalScore:{$sum:'$marks'}}},
-... {$sort:{totalScore:-1}}
-... ]);
-[ { _id: 110, totalScore: 485 }, { _id: 101, totalScore: 461 } ]
-------------------------------------------------------------------------------------------------------------------------------------------4)use limit function
-
-Assignment_10> db.student.aggregate([ {$unwind:'$marks'},
-... {$group:{_id:'rollNo',totalScore:{$sum:'$marks'}}},
-... {$sort:{totalScore:-1}},
-... {$limit:2},
-... ]);
-[ 
-{ _id: 110, totalScore: 485 },
-{ _id: 103, totalScore: 480 } 
-]
-------------------------------------------------------------------------------------------------------------------------------------------5)with all match,group,sort,limit
-Assignment_10> db.student.aggregate([ 
+student> db.studentdata.dropIndex('name_1')
+{ nIndexesWas: 4, ok: 1 }
+student> db.studentdata.find({name:"Manav"}).explain(executionStats)
+ReferenceError: executionStats is not defined
+student> db.studentdata.find({name:"Manav"}).explain("executionStats")
 {
-$unwind:'$marks'
-},
-{
-$match:{dept:'Civil'}
-},
-{
-$group:{_id:'$rollNo',totalScore:{$sum:'$marks'}}
-},
-{
-$sort:{totalScore:-1}
-},
-{$limit:2
+  explainVersion: '2',
+  queryPlanner: {
+    namespace: 'student.studentdata',
+    indexFilterSet: false,
+    parsedQuery: { name: { '$eq': 'Manav' } },
+    queryHash: '1AD872C6',
+    planCacheKey: 'F46F8B18',
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    winningPlan: {
+      queryPlan: {
+        stage: 'COLLSCAN',
+        planNodeId: 1,
+        filter: { name: { '$eq': 'Manav' } },
+        direction: 'forward'
+      },
+      slotBasedPlan: {
+        slots: '$$RESULT=s5 env: { s1 = TimeZoneDatabase(ROK...Mexico/BajaSur) (timeZoneDB), s2 = Nothing (SEARCH_META), s3 = 1699162601128 (NOW), s7 = "Manav" }',
+        stages: '[1] filter {traverseF(s4, lambda(l1.0) { ((l1.0 == s7) ?: false) }, false)} \n' +
+          '[1] scan s5 s6 none none none none lowPriority [s4 = name] @"4d8a4250-c944-4897-ae79-23a934d898ec" true false '
+      }
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 2,
+    executionTimeMillis: 0,
+    totalKeysExamined: 0,
+    totalDocsExamined: 4,
+    executionStages: {
+      stage: 'filter',
+      planNodeId: 1,
+      nReturned: 2,
+      executionTimeMillisEstimate: 0,
+      opens: 1,
+      closes: 1,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      numTested: 4,
+      filter: 'traverseF(s4, lambda(l1.0) { ((l1.0 == s7) ?: false) }, false) ',
+      inputStage: {
+        stage: 'scan',
+        planNodeId: 1,
+        nReturned: 4,
+        executionTimeMillisEstimate: 0,
+        opens: 1,
+        closes: 1,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        numReads: 4,
+        recordSlot: 5,
+        recordIdSlot: 6,
+        fields: [ 'name' ],
+        outputSlots: [ Long("4") ]
+      }
+    }
+  },
+  command: { find: 'studentdata', filter: { name: 'Manav' }, '$db': 'student' },
+  serverInfo: {
+    host: 'manav',
+    port: 27017,
+    version: '7.0.2',
+    gitVersion: '02b3c655e1302209ef046da6ba3ef6749dd0b62a'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeEngine'
+  },
+  ok: 1
 }
-]);
-[ 
-{ _id: 107, totalScore: 479 }, 
-{ _id: 102, totalScore: 456 } ]
-------------------------------------------------------------------------------------------------------------------------------------------6)to count documents
-Assignment_10> db.student.countDocuments({});
-10
-------------------------------------------------------------------------------------------------------------------------------------------7)to find distinct values
-Assignment_10> db.student.distinct('dept');
-[ 'Civil', 'Computer', 'ENTC', 'Electrical', 'IT', 'Mechanical' ]
-Assignment_10> db.student.distinct('name');
+student> db.studentdata.createIndex({name:1})
+name_1
+student> db.studentdata.getIndexes()
 [
-  'Afrin',   'Akshata',
-  'Anushka', 'Geeta',
-  'Nikita',  'Poonam',
-  'Sampada', 'Saniya',
-  'Shruti',  'Varsha'
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { age: -1 }, name: 'age_-1' },
+  { v: 2, key: { marks: 1 }, name: 'marks_1', unique: true },
+  { v: 2, key: { name: 1 }, name: 'name_1' }
 ]
-------------------------------------------------------------------------------------------------------------------------------------------8)
+student> db.studentdata.find({name:"Manav"}).explain("executionStats")
+{
+  explainVersion: '2',
+  queryPlanner: {
+    namespace: 'student.studentdata',
+    indexFilterSet: false,
+    parsedQuery: { name: { '$eq': 'Manav' } },
+    queryHash: '1AD872C6',
+    planCacheKey: 'AC618571',
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    winningPlan: {
+      queryPlan: {
+        stage: 'FETCH',
+        planNodeId: 2,
+        inputStage: {
+          stage: 'IXSCAN',
+          planNodeId: 1,
+          keyPattern: { name: 1 },
+          indexName: 'name_1',
+          isMultiKey: false,
+          multiKeyPaths: { name: [] },
+          isUnique: false,
+          isSparse: false,
+          isPartial: false,
+          indexVersion: 2,
+          direction: 'forward',
+          indexBounds: { name: [ '["Manav", "Manav"]' ] }
+        }
+      },
+      slotBasedPlan: {
+        slots: '$$RESULT=s11 env: { s1 = TimeZoneDatabase(ROK...Mexico/BajaSur) (timeZoneDB), s2 = Nothing (SEARCH_META), s5 = KS(3C4D616E6176000104), s10 = {"name" : 1}, s3 = 1699162658296 (NOW), s6 = KS(3C4D616E617600FE04) }',
+        stages: '[2] nlj inner [] [s4, s7, s8, s9, s10] \n' +
+          '    left \n' +
+          '        [1] cfilter {(exists(s5) && exists(s6))} \n' +
+          '        [1] ixseek s5 s6 s9 s4 s7 s8 [] @"4d8a4250-c944-4897-ae79-23a934d898ec" @"name_1" true \n' +
+          '    right \n' +
+          '        [2] limit 1 \n' +
+          '        [2] seek s4 s11 s12 s7 s8 s9 s10 [] @"4d8a4250-c944-4897-ae79-23a934d898ec" true false \n'
+      }
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 2,
+    executionTimeMillis: 5,
+    totalKeysExamined: 2,
+    totalDocsExamined: 2,
+    executionStages: {
+      stage: 'nlj',
+      planNodeId: 2,
+      nReturned: 2,
+      executionTimeMillisEstimate: 0,
+      opens: 1,
+      closes: 1,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      totalDocsExamined: 2,
+      totalKeysExamined: 2,
+      collectionScans: 0,
+      collectionSeeks: 2,
+      indexScans: 0,
+      indexSeeks: 1,
+      indexesUsed: [ 'name_1' ],
+      innerOpens: 2,
+      innerCloses: 1,
+      outerProjects: [],
+      outerCorrelated: [ Long("4"), Long("7"), Long("8"), Long("9"), Long("10") ],
+      outerStage: {
+        stage: 'cfilter',
+        planNodeId: 1,
+        nReturned: 2,
+        executionTimeMillisEstimate: 0,
+        opens: 1,
+        closes: 1,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        numTested: 1,
+        filter: '(exists(s5) && exists(s6)) ',
+        inputStage: {
+          stage: 'ixseek',
+          planNodeId: 1,
+          nReturned: 2,
+          executionTimeMillisEstimate: 0,
+          opens: 1,
+          closes: 1,
+          saveState: 0,
+          restoreState: 0,
+          isEOF: 1,
+          indexName: 'name_1',
+          keysExamined: 2,
+          seeks: 1,
+          numReads: 3,
+          indexKeySlot: 9,
+          recordIdSlot: 4,
+          snapshotIdSlot: 7,
+          indexIdentSlot: 8,
+          outputSlots: [],
+          indexKeysToInclude: '00000000000000000000000000000000',
+          seekKeyLow: 's5 ',
+          seekKeyHigh: 's6 '
+        }
+      },
+      innerStage: {
+        stage: 'limit',
+        planNodeId: 2,
+        nReturned: 2,
+        executionTimeMillisEstimate: 0,
+        opens: 2,
+        closes: 1,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        limit: 1,
+        inputStage: {
+          stage: 'seek',
+          planNodeId: 2,
+          nReturned: 2,
+          executionTimeMillisEstimate: 0,
+          opens: 2,
+          closes: 1,
+          saveState: 0,
+          restoreState: 0,
+          isEOF: 0,
+          numReads: 2,
+          recordSlot: 11,
+          recordIdSlot: 12,
+          seekKeySlot: 4,
+          snapshotIdSlot: 7,
+          indexIdentSlot: 8,
+          indexKeySlot: 9,
+          indexKeyPatternSlot: 10,
+          fields: [],
+          outputSlots: []
+        }
+      }
+    }
+  },
+  command: { find: 'studentdata', filter: { name: 'Manav' }, '$db': 'student' },
+  serverInfo: {
+    host: 'manav',
+    port: 27017,
+    version: '7.0.2',
+    gitVersion: '02b3c655e1302209ef046da6ba3ef6749dd0b62a'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeEngine'
+  },
+  ok: 1
+}
+student> db.studentdata.find()
+[
+  {
+    _id: ObjectId("6546870c001ced33d907b1ce"),
+    name: 'Manav',
+    marks: 150,
+    age: 20
+  },
+  {
+    _id: ObjectId("6546870c001ced33d907b1cf"),
+    name: 'Madhushri',
+    marks: 200,
+    age: 19
+  },
+  {
+    _id: ObjectId("6546870c001ced33d907b1d0"),
+    name: 'Rutwik',
+    marks: 170,
+    age: 19
+  },
+  {
+    _id: ObjectId("65471a09c1ea805801069cdd"),
+    name: 'Manav',
+    marks: 250,
+    age: 20
+  }
+]
+student> db.studentdata.save({_id:ObjectId("6546870c001ced33d907b1ce"),name:"Manavi",marks:150,age:20})
+TypeError: db.studentdata.save is not a function
+student> db.studentdata.save({_id:ObjectId("6546870c001ced33d907b1ce"),name:"Manavi",marks:300,age:21})
+TypeError: db.studentdata.save is not a function
+student>
