@@ -1,98 +1,84 @@
-Name : Manav Mehta
-Roll no: 31446
-Class: TE-4
-Subject: DBMSL
-Assignment No: 6
-****************************** Table Creation ************************************
-1. Table O_EmpID
-mysql> CREATE TABLE O_EmpID (
--> emp_id INT,
--> dept_id INT,
--> emp_fname VARCHAR(20),
--> emp_lname VARCHAR(20),
--> emp_position VARCHAR(50),
--> emp_salary INT,
--> emp_jdate DATE,
--> PRIMARY KEY (emp_id)
--> );
-Query OK, 0 rows affected (0.06 sec)
+mysql> desc customer_old;
++------------+-------------+------+-----+---------+----------------+
+| Field | Type | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+----------------+
+| cid | int | NO | PRI | NULL | auto_increment |
+| cname | varchar(20) | YES | | NULL | |
+| order_cost | float | YES | | NULL | |
+| visit | date | YES | | NULL | |
++------------+-------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+mysql> desc customer_new;
++------------+-------------+------+-----+---------+----------------+
+| Field | Type | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+----------------+
+| cid | int | NO | PRI | NULL | auto_increment |
+| cname | varchar(20) | YES | | NULL | |
+| order_cost | float | YES | | NULL | |
+| visit | date | YES | | NULL | |
++------------+-------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+-------------------------------------------------------------------------
+----------------------------------------------------------------
+#CURSOR DEFINATION
+mysql> delimiter $
+mysql> create procedure cur_op( c_id int )
+-> begin
+-> declare cid_2 int;
+-> declare exit_loop boolean;
+-> declare c1 cursor for select cid from customer_old where cid >
+c_id;
+-> declare continue handler for not found set exit_loop = true;
+-> open c1;
+-> cust_loop: loop
+-> fetch c1 into cid_2;
+-> if not exists (select * from customer_new where cid = cid_2) then
+-> insert into customer_new select * from customer_old where cid =
+cid_2;
 
-2. Table N_EmpID
-mysql> CREATE TABLE N_EmpID (
--> emp_id INT,
--> dept_id INT,
--> emp_fname VARCHAR(20),
--> emp_lname VARCHAR(20),
--> emp_position VARCHAR(50),
--> emp_salary INT,
--> emp_jdate DATE,
--> PRIMARY KEY (emp_id)
--> );
-Query OK, 0 rows affected (0.05 sec)
-****************************** Table Addition ************************************
-mysql> insert into O_EmpID VALUES(1,1,"Varad","Pundlik","SDE",100000,"2024-06-01");
-Query OK, 1 row affected (0.02 sec)
-mysql> insert into O_EmpID VALUES(2,1,"Manav","Mehta","SDE",100000,"2024-06-03");
-Query OK, 1 row affected (0.03 sec)
-mysql> insert into O_EmpID VALUES(3,2,"Divyank","Sagvekar","SDE
-intern",70000,"2024-07-03");
-Query OK, 1 row affected (0.02 sec)
-mysql> insert into O_EmpID VALUES(4,3,"Rutwik","Malav","SDE intern",70000,"2024-07-
-03");
-Query OK, 1 row affected (0.01 sec)
-mysql> insert into O_EmpID VALUES(5,1,"John","Doe","CEO",700000,"1999-07-03");
-
-Query OK, 1 row affected (0.01 sec)
-mysql> select * from O_EmpID;
-+--------+---------+-----------+-----------+--------------+------------+------------+
-| emp_id | dept_id | emp_fname | emp_lname | emp_position | emp_salary | emp_jdate |
-+--------+---------+-----------+-----------+--------------+------------+------------+
-| 1 | 1 | Varad | Pundlik | SDE | 100000 | 2024-06-01 |
-| 2 | 1 | Manav | Mehta | SDE | 100000 | 2024-06-03 |
-| 3 | 2 | Divyank | Sagvekar | SDE intern | 70000 | 2024-07-03 |
-| 4 | 3 | Rutwik | Malav | SDE intern | 70000 | 2024-07-03 |
-| 5 | 1 | John | Doe | CEO | 700000 | 1999-07-03 |
-+--------+---------+-----------+-----------+--------------+------------+------------+
-5 rows in set (0.00 sec)
-***************************** Procedure Creation *******************************
-1. mergeEMP Procedure
-mysql> CREATE PROCEDURE mergeEMP ()
--> BEGIN
--> DECLARE done INT DEFAULT 0;
--> DECLARE eno INT;
--> DECLARE old_cursor CURSOR FOR SELECT emp_id FROM O_EmpID;
--> DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
--> OPEN old_cursor;
-->
--> getEmpID: LOOP
--> IF done = TRUE THEN
--> LEAVE getEmpID;
--> END IF;
--> FETCH old_cursor INTO eno;
-->
--> IF NOT EXISTS (SELECT 1 FROM N_EmpID where emp_id = eno) THEN
--> INSERT INTO N_EmpID
--> SELECT * FROM O_EmpID
--> WHERE O_EmpID.emp_id = eno;
--> END IF;
--> END LOOP;
-->
--> CLOSE old_cursor;
--> END //
-Query OK, 0 rows affected (0.00 sec)
-
-********************************** Output **************************************
-mysql> call MergeEMP()//
-Query OK, 0 rows affected, 1 warning (0.05 sec)
-mysql> select * from N_EmpID//
-+--------+---------+-----------+-----------+--------------+------------+------------+
-| emp_id | dept_id | emp_fname | emp_lname | emp_position | emp_salary | emp_jdate |
-+--------+---------+-----------+-----------+--------------+------------+------------+
-
-| 1 | 1 | Varad | Pundlik | SDE | 100000 | 2024-06-01 |
-| 2 | 1 | Manav | Mehta | SDE | 100000 | 2024-06-03 |
-| 3 | 2 | Divyank | Sagvekar | SDE intern | 70000 | 2024-07-03 |
-| 4 | 3 | Rutwik | Malav | SDE intern | 70000 | 2024-07-03 |
-| 5 | 1 | John | Doe | CEO | 700000 | 1999-07-03 |
-+--------+---------+-----------+-----------+--------------+------------+------------+
-5 rows in set (0.00 sec)
+-> end if;
+-> if exit_loop then
+-> close c1;
+-> leave cust_loop;
+-> end if;
+-> end loop cust_loop;
+-> end$
+-------------------------------------------------------------------------
+--------------------------------------------------------------
+#PROCEDURE CALL
+mysql> select *from customer_old;
++-----+--------+------------+------------+
+| cid | cname | order_cost | visit |
++-----+--------+------------+------------+
+| 1 | Mayur | 337.29 | 2023-09-10 |
+| 2 | Anmol | 3500.86 | 2023-09-14 |
+| 3 | Sumit | 69 | 2023-07-22 |
+| 4 | Pavan | 105.5 | 2023-09-22 |
+| 5 | Aditya | 200 | 2023-09-20 |
+| 6 | Omkar | 160.25 | 2023-09-20 |
++-----+--------+------------+------------+
+6 rows in set (0.00 sec)
+mysql> select *from customer_new;
+Empty set (0.00 sec)
+mysql> call cur_op(5);
+Query OK, 0 rows affected (0.01 sec)
+mysql> select *from customer_new;
++-----+--------+------------+------------+
+| cid | cname | order_cost | visit |
++-----+--------+------------+------------+
+| 6 | Omkar | 160.25 | 2023-09-20 |
++-----+--------+------------+------------+
+1 row in set (0.00 sec)
+mysql> call cur_op(0);
+Query OK, 0 rows affected (0.01 sec)
+mysql> select *from customer_new;
++-----+--------+------------+------------+
+| cid | cname | order_cost | visit |
++-----+--------+------------+------------+
+| 1 | Mayur | 337.29 | 2023-09-10 |
+| 2 | Anmol | 3500.86 | 2023-09-14 |
+| 3 | Sumit | 69 | 2023-07-22 |
+| 4 | Pavan | 105.5 | 2023-09-22 |
+| 5 | Aditya | 200 | 2023-09-20 |
+| 6 | Omkar | 160.25 | 2023-09-20 |
++-----+--------+------------+------------+
