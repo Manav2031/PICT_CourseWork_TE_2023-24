@@ -53,4 +53,141 @@ mysql> select * from Areas;
 +--------+--------+
 2 rows in set (0.00 sec)
 
+A) Borrower
+
+
+mysql> create table Borrower(rollno integer primary key, name varchar(40), doi date, bname varchar(40), status char);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table Fine(rollno int, date date, amount int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into Borrower values(1,'Kunal','2023-11-01','Merchant of Venice','I');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Borrower values(2,'Sarthak','2023-10-30','As you like it','I');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Borrower values(3,'Atharva','2023-10-31','My Experiments with truth','I');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Borrower values(4,'Omkar','2023-10-25','Malgudi Days','I');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Borrower values(5,'Darshan','2023-10-15','The Hidden Pool','I');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from Borrower;
++--------+---------+------------+---------------------------+--------+
+| rollno | name    | doi        | bname                     | status |
++--------+---------+------------+---------------------------+--------+
+|      1 | Kunal   | 2023-11-01 | Merchant of Venice        | I      |
+|      2 | Sarthak | 2023-10-30 | As you like it            | I      |
+|      3 | Atharva | 2023-10-31 | My Experiments with truth | I      |
+|      4 | Omkar   | 2023-10-25 | Malgudi Days              | I      |
+|      5 | Darshan | 2023-10-15 | The Hidden Pool           | I      |
++--------+---------+------------+---------------------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> delimiter //
+mysql> create procedure finecalc(in roll_no int, in b_name varchar(40))
+    -> begin
+    -> declare date_of_issue date;
+    -> declare fineamt int default -1;
+    -> declare days int;
+    -> declare act_rollno int;
+    -> declare pre_status char;
+    -> declare exit handler for SQLSTATE '43250'
+    -> begin
+    -> select "Book was previously returned" as Exception;
+    -> end;
+    -> declare exit handler for SQLSTATE '43251'
+    -> begin
+    -> select "This rollnumber did not issue the book which they are trying to return" as Exception;
+    -> end;
+    -> declare exit handler for not found
+    -> begin
+    -> select "Book not found" as Exception;
+    -> end;
+    -> select doi into date_of_issue from Borrower where bname=b_name;
+    -> select rollno into act_rollno from Borrower where bname=b_name;
+    -> select status into pre_status from Borrower where bname=b_name;
+    -> if(pre_status="R") then
+    -> SIGNAL SQLSTATE '43250';
+    -> end if;
+    -> if(roll_no!=act_rollno) then
+    -> SIGNAL SQLSTATE '43251';
+    -> end if;
+    -> set days=DATEDIFF(CURDATE(),date_of_issue);
+    -> if(days>15 and days<=30) then
+    -> set fineamt=days*5;
+    -> elseif (days>30) then
+    -> set fineamt=(days-30)*50+150;
+    -> end if;
+    -> if (fineamt!=-1) then
+    -> insert into Fine values(roll_no,CURDATE(),fineamt);
+    -> update Borrower set status="R" where rollno=roll_no;
+    -> select fineamt as "Fine to be paid";
+    -> else
+    -> update Borrower set status="R" where rollno=roll_no;
+    -> select "No Fine to be paid" as "Message";
+    -> end if;
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call finecalc(1,'Merchant of Venice');
+    -> ^C
+mysql> call finecalc(1,'Merchant of Venice')//
++--------------------+
+| Message            |
++--------------------+
+| No Fine to be paid |
++--------------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call finecalc(2,'As you like it')//
++--------------------+
+| Message            |
++--------------------+
+| No Fine to be paid |
++--------------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call finecalc(5,'The Hidden Pool')//
++-----------------+
+| Fine to be paid |
++-----------------+
+|             105 |
++-----------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from Fine//
++--------+------------+--------+
+| rollno | date       | amount |
++--------+------------+--------+
+|      5 | 2023-11-05 |    105 |
++--------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from Borrower;
+    -> ^C
+mysql> delimiter ;
+mysql> select * from Borrower;
++--------+---------+------------+---------------------------+--------+
+| rollno | name    | doi        | bname                     | status |
++--------+---------+------------+---------------------------+--------+
+|      1 | Kunal   | 2023-11-01 | Merchant of Venice        | R      |
+|      2 | Sarthak | 2023-10-30 | As you like it            | R      |
+|      3 | Atharva | 2023-10-31 | My Experiments with truth | I      |
+|      4 | Omkar   | 2023-10-25 | Malgudi Days              | I      |
+|      5 | Darshan | 2023-10-15 | The Hidden Pool           | R      |
++--------+---------+------------+---------------------------+--------+
+5 rows in set (0.00 sec)
+
 mysql>
