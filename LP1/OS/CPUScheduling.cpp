@@ -244,7 +244,7 @@ public:
 			return lhs.arrivalTime < rhs.arrivalTime;
 		});
 
-		while (currentTime < totalTime) {
+		while (currentTime <= totalTime) {
 			while (processCompleted < n && processes[processCompleted].arrivalTime <= currentTime) {
 				readyQueue.push_back(processes[processCompleted]);
 				processCompleted++;
@@ -253,6 +253,8 @@ public:
 			if (addedJob.burstTime > 0) {
 				readyQueue.push_back(addedJob);
 			}
+
+			this->displayGantt(readyQueue, currentTime);
 
 			if (readyQueue.size() > 0) {
 				addedJob = readyQueue[0];
