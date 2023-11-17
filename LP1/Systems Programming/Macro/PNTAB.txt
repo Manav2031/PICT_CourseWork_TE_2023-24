@@ -1,0 +1,8 @@
+PNTAB for ONE
+2	O
+3	N
+4	E
+PNTAB for TWO
+2	T
+3	W
+4	O
