@@ -1,197 +1,131 @@
-#include <bits/stdc++.h>
-#include <fstream>
+#include<bits/stdc++.h>
 using namespace std;
 
-class MNTvalues {
-	int PP;
-	int KP;
-	int MDTP;
-	int KPDTP;
+int main(){
 
-public:
-	MNTvalues() {
-		PP = 0;
-		KP = 0;
-		MDTP = 0;
-		KPDTP = 0;
-	}
+    ifstream fin;
+    fin.open("source.txt");
 
-	friend class MacroProcessor;
-};
+    ofstream mntout,kpdtout,pntout,mdtout,fout;
+    mntout.open("MNT.txt");
+    mdtout.open("MDT.txt");
+    kpdtout.open("KPDTAB.txt"); 
+    pntout.open("PNTAB.txt");
+    fout.open("output.txt");
 
-class MacroProcessor {
-	vector<pair<string, MNTvalues>> MNT;
-	vector<pair<string, string>> KPDTAB;
-	vector<vector<string>> MDT;
-    vector<string> PNTAB;
-	fstream file;
-    fstream macro_name_table;
-    fstream keyword_parameter_table;
-    fstream macro_definition_table;
-    fstream parameter_table;
+    vector<array<string,5>> mnt;
+    vector<pair<string,string>> kpdt;
+    map<string,int> pnt;
 
-public:
-	MacroProcessor() {
-		file.open("macro_input.txt", ios::in);
-		if (!file.is_open()) {
-			cout<<"Error opening sample file"<<endl;
-		}
+    int mdtptr = 1;
+    bool macroStart = false,started = false;
+    string line,word;
 
-        macro_name_table.open("macro_name_table.txt", ios::out);
-		if (!macro_name_table.is_open()) {
-			cout<<"Error opening sample file"<<endl;
-		}
+    while(getline(fin,line)){
+        stringstream ss(line);
 
-        keyword_parameter_table.open("keyword_parameter_table.txt", ios::out);
-		if (!keyword_parameter_table.is_open()) {
-			cout<<"Error opening sample file"<<endl;
-		}
+        ss >> word;
 
-        macro_definition_table.open("macro_definition_table.txt", ios::out);
-		if (!macro_definition_table.is_open()) {
-			cout<<"Error opening sample file"<<endl;
-		}
-
-        parameter_table.open("parameter_table.txt", ios::out);
-		if (!parameter_table.is_open()) {
-			cout<<"Error opening sample file"<<endl;
-		}
-	}
-
-    int findParameter(string parameter, string name) {
-        int reference;
-        for (int i = 0; i < PNTAB.size(); i++) {
-            if (PNTAB[i] == name) {
-                reference = i;
-                break;
-            }
+        if(word == "MACRO"){
+            macroStart = true;
+            continue;
         }
-        for (int i = reference; i < PNTAB.size(); i++) {
-            if (PNTAB[i] == parameter) {
-                return i - reference;
-            }
-        }
-        return -1;
-    }
 
-	void passOne() {
-		vector<string> words;
-        vector<string> temp;
-		string line;
-        string name;
-		int kcounter = 0;
-		int pcounter = 0;
-		int mcounter = 0;
-		bool insideMacro = false;
-		bool firstLine = false;
-        MNTvalues m;
-		if (file.is_open()) {
-			while (!file.eof()) {
-				getline(file, line);
-				string w = "";
-				for (int i = 0;i < int(line.size()); i++) {
-					if (line[i] != ' ') {
-						w += line[i];
-					} else {
-						words.push_back(w);
-						w = "";
-					}
-				}
-				words.push_back(w);
-				if (words[0] == "MACRO"){
-					insideMacro = true;
-					firstLine = true;
-				} else if (firstLine && insideMacro) {
-                    name = words[0];
-                    PNTAB.push_back(name);
-					for (int i = 1; i < words.size(); i++) {
-						if (words[i].at(0) == '&') {
-							PNTAB.push_back(words[i]);
-							pcounter++;
-						} else if (words[i] == "=") {
-							if (i != words.size() - 1 && words[i + 1].at(0) != '&') {
-								KPDTAB.push_back({words[i - 1], words[i + 1]});
-								kcounter++;
-							} else if (i == words.size() - 1 || words[i + 1].at(0) == '&'){
-								KPDTAB.push_back({words[i - 1], ""});
-								kcounter++;
-							}
-						}
-					}
-					if (kcounter != 0) {
-						m.KPDTP = KPDTAB.size() - kcounter + 1;
-					}
-					m.KP = kcounter;
-					m.PP = pcounter - kcounter;
-					m.MDTP = mcounter + 1;
-					firstLine = false;
-					pcounter = 0;
-					kcounter = 0;
-					MNT.push_back({words[0], m});
-				} else if (!firstLine && insideMacro) {
-                    for (int i = 0; i < words.size(); i++) {
-                        if(words[i].at(0) == '&') {
-                            string parameter = "(P,";
-                            parameter += to_string(findParameter(words[i], name));
-                            parameter += ")";
-                            temp.push_back(parameter);
-                        } else {
-                            temp.push_back(words[i]);
-                        }
+        if(macroStart){
+            array<string,5> temp;
+            mnt.push_back(temp);
+            int i = mnt.size() - 1;
+
+            mnt[i][0] = word;
+            mnt[i][3] = to_string(mdtptr);
+
+            pntout << "PNTAB for " << word << "\n";
+
+            int pp = 0,kp = 0;
+            while(ss >> word){
+                word = word.substr(1);
+                if(word[word.size() - 1] == ',')
+                    word = word.substr(0,word.size()-1);
+
+                int kpidx = -1;
+                for(int i = 0;i < word.size();i++){
+                    if(word[i] == '='){
+                        kpidx = i;
+                        break;
                     }
-                    MDT.push_back(temp);
-                    temp.clear();
-                    mcounter++;
+                } 
+
+                if(kpidx != -1){
+                    kp++;
+                    pair<string,string> pr = {word.substr(0,kpidx),word.substr(kpidx + 1)};
+                    kpdt.push_back(pr);
+
+                    pnt[pr.first] = pnt.size() + 1;
+                    pntout << pnt[pr.first] << "\t" << pr.first << "\n";
                 }
-                if (words[0] == "MEND") {
-					insideMacro = false;
-				}
-				words.clear();
-			}
-		} else {
-			cout<<"Error opening file"<<endl;
-		}
-		file.close();
-	}
+                else{
+                    pp++;
 
-    void displayMNT() {
-        for (auto x: MNT) {
-            macro_name_table<<x.first<<" "<<x.second.PP<<" "<<x.second.KP<<" "<<x.second.KPDTP<<" "<<x.second.MDTP<<endl;
-        }
-        macro_name_table.close();
-    }
-
-    void displayKPDTAB() {
-        for (auto x: KPDTAB) {
-            keyword_parameter_table<<x.first<<" "<<x.second<<endl;
-        }
-        keyword_parameter_table.close();
-    }
-
-    void displayMDT() {
-        for (int i = 0; i < MDT.size(); i++) {
-            for (int j = 0; j < MDT[i].size(); j++) {
-                macro_definition_table<<MDT[i][j]<<" ";
+                    pnt[word] = pnt.size() + 1;
+                    pntout << pnt[word] << "\t" << word << "\n";
+                }       
             }
-            macro_definition_table<<endl;
+
+            mnt[i][1] = to_string(pp);
+            mnt[i][2] = to_string(kp);
+            if(kp > 0) mnt[i][4] = to_string(kpdt.size() - kp + 1);
+
+            macroStart = false;
+            continue;
         }
-        macro_definition_table.close();
+
+        if(word == "MEND"){
+            mdtout << "MEND" << "\n";
+            pnt.clear();
+        }
+        else{
+            mdtout << word << " ";
+            
+            bool first = true;
+            while(ss >> word){
+                if(!first){
+                    mdtout << ", ";
+                }
+
+                if(word[0] == '&'){
+                    word = word.substr(1);
+                    if(word[word.size() - 1] == ',')
+                        word = word.substr(0,word.size()-1);
+
+                    mdtout << "(P," << pnt[word]  << ")";
+                }
+                else{
+                    if(word[word.size() - 1] == ',')
+                        word = word.substr(0,word.size()-1);
+                    mdtout << word << " ";
+                }
+                first = false;   
+            }
+            mdtout << "\n";
+        }
+
+        mdtptr++;
+        
     }
 
-    void displayPNTAB() {
-        for (auto x: PNTAB) {
-            parameter_table<<x<<endl;
+    for(int i = 0;i < mnt.size();i++){
+        for(int j = 0;j < 5;j++){
+            cout << mnt[i][j] << " ";
+            mntout << mnt[i][j] << " ";
         }
-        parameter_table.close();
+        cout << "\n";
+        mntout << "\n";
     }
-};
 
-int main() {
-	MacroProcessor m;
-	m.passOne();
-    m.displayMNT();
-    m.displayKPDTAB();
-    m.displayMDT();
-    m.displayPNTAB();
-	return 0;
+    for(int i = 0;i < kpdt.size();i++){
+        kpdtout << kpdt[i].first << " " << kpdt[i].second << "\n";
+    }
+
+
+    return 0;
 }

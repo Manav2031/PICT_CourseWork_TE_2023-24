@@ -95,7 +95,7 @@ public:
         int currentTime = 0;
         int processCompleted = 0;
 
-		sort(processes, processes + n, [] (const Job & lhs, const Job rhs) {
+		sort(processes, processes + n, [] (const Job & lhs, const Job & rhs) {
             return lhs.arrivalTime < rhs.arrivalTime;
         });
 
