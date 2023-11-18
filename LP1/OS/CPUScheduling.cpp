@@ -184,8 +184,8 @@ public:
             cin>>priority[i];
         }
 
-		for (int i = 0; i <= n - 1; i++) {
-            for (int j = 0; j <= n - i - 1; j++) {
+		for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
                 if (priority[j] > priority[j + 1]) {
                     swap(priority[j], priority[j + 1]);
                     swap(processes[j], processes[j + 1]);
