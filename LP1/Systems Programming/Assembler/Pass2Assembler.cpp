@@ -61,7 +61,7 @@ int main()
             }
             else if(words[6][1]=='L')
             {
-                int index=words[7][0]='0';
+                int index=words[7][0]-'0';
                 fout<<littab[index-1].second<<" "<<endl;
             }
             else
