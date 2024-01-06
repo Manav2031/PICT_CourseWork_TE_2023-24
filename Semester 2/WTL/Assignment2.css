@@ -1,0 +1,65 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+h1, h2, h3 {
+    color: #761a1a;
+}
+
+hr {
+    border: 2px solid #db5034;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.ContactDetails, .EducationDetails, .ExperienceDetails, .ProjectsDetails {
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 2px solid #db5034;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #db5034;
+    color: #fff;
+}
+
+a {
+    color: #761a1a;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
