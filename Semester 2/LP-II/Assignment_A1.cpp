@@ -29,12 +29,8 @@ void DFS(int node)
 
     for (it = adj[node].begin(); it!=adj[node].end(); it++)
     {
-        if(vis[*it])
-        ;
-        else
-        {
-            DFS(*it);
-        }
+        if(!vis[*it])
+        DFS(*it);
     }
 }
 
