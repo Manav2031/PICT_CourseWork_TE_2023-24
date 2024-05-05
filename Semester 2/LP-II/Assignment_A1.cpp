@@ -2,35 +2,32 @@
 
 using namespace std;
 
-const int N = 1e5 + 2;
-bool vis[N];
-vector<int> adj[N];
-queue<int> q;
+
+map <string,bool> vis;
+map <string, vector<string>> adj;
+queue<string> q;
 
 
-void setVisitedtoZero(bool vis[])
+void setVisitedtoZero()
 {
-    for(int i=0;i<=N;i++)
+    for(auto pair:adj)
     {
-        vis[i] = false;
+        vis[pair.first] = false;
     }
 }
 
 
 
-void DFS(int node)
+void DFS(string node)
 {
-    vis[node] = 1;
+    vis[node] = true;
     cout<<node<<" ";
 
 
-    vector<int>:: iterator it;
-
-
-    for (it = adj[node].begin(); it!=adj[node].end(); it++)
+    for (auto it:adj[node])
     {
-        if(!vis[*it])
-        DFS(*it);
+        if(!vis[it])
+        DFS(it);
     }
 }
 
@@ -41,20 +38,18 @@ void BFS()
     if(q.empty())
         return;
 
-    int node = q.front();
+    string node = q.front();
 
     q.pop();
 
     cout<<node<<" ";
 
-    vector<int> :: iterator it;
-
-    for(it=adj[node].begin(); it!= adj[node].end(); it++)
+    for(auto it:adj[node])
     {
-        if(!vis[*it])
+        if(!vis[it])
         {
-            vis[*it] = true;
-            q.push(*it);
+            vis[it] = true;
+            q.push(it);
         }
     }
 
@@ -68,11 +63,11 @@ int main()
 {
 
     int n,m;
-    cout<<"Enter the number of edges and vetices of the graph:\n";
+    cout<<"Enter the number of routes and cities of the graph:\n";
     cin>>n>>m;
 
-    int x,y;
-    cout<<"Enter starting and ending vertices of the edges:\n";
+    string x,y;
+    cout<<"Enter starting and ending cities of the routes:\n";
     
     for(int i=0; i<n; i++)
     {
@@ -81,44 +76,42 @@ int main()
         adj[y].push_back(x);
     }
 
-
-
-    int choice;
-
-    do
+    while(true)
     {
-        cout<<"\n----MENU----\n";
-        cout<<"1. DFS\n2. BFS\n3. Exit\n";
-        cout<<"Enter the choice: ";
+        cout<<"1. DFS"<<endl;
+        cout<<"2. BFS"<<endl;
+        cout<<"3. Exit"<<endl;
+        cout<<"Enter your choice:"<<endl;
+        int choice;
+        string node;
         cin>>choice;
-
-        int node;
-
-        switch(choice)
+        if(choice==1)
         {
-            case 1:
-                    cout<<"Enter the node to start with:\n";
-                    cin>>node;
-                    cout<<"\nDFS:\n";
-                    setVisitedtoZero(vis);
-                    DFS(node);
-                    break;
-
-
-            case 2: 
-                    cout<<"Enter the node to start with:\n";
-                    cin>>node;
-                    q.push(node);
-                    cout<<"\nBFS:\n";
-                    setVisitedtoZero(vis);
-                    vis[node] = true;
-                    BFS();
-                    break;
- 
+            cout<<"Enter the city to start with:\n";
+            cin>>node;
+            cout<<"\nDFS:\n";
+            setVisitedtoZero();
+            DFS(node);
+            cout<<endl;
         }
-
-
-    } while(choice!=3);
-
+        else if(choice==2)
+        {
+            cout<<"Enter the city to start with:\n";
+            cin>>node;
+            q.push(node);
+            cout<<"\nBFS:\n";
+            setVisitedtoZero();
+            vis[node] = true;
+            BFS();
+            cout<<endl;
+        }
+        else if(choice==3)
+        {
+            cout<<"Program exited successfully."<<endl;
+            break;
+        }
+        else
+        cout<<"Invalid choice. Please enter a valid number between 1 and 3."<<endl;
+    }
     return 0;
 }
