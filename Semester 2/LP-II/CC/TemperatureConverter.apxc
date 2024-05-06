@@ -1,6 +1,6 @@
 public class TemperatureConverter {
     public static void celsiusToFahrenheit(Decimal celsius) {
-        Decimal ans=(((Decimal)9/5)*celsius).setScale(2) + 32;
+        Decimal ans=((((Decimal)9/5)*celsius).setScale(2)) + 32;
         System.debug('Temperature in Fahrenheit is '+ans);
     }
     public static void fahrenheitToCelsius(Decimal fahrenheit) {
