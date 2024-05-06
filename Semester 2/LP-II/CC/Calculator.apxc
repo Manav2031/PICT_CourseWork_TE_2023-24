@@ -1,0 +1,50 @@
+public class Calculator {
+    
+    public static void add(Decimal num1, Decimal num2) {
+        Decimal ans=num1+num2;
+        System.debug('Addition of '+num1+' and '+num2+' is '+ans);
+    }
+    
+ 
+    public static void subtract(Decimal num1, Decimal num2) {
+        Decimal ans=num1-num2;
+        System.debug('Subtraction of '+num1+' and '+num2+' is '+ans);
+    }
+    
+   
+    public static void multiply(Decimal num1, Decimal num2) {
+        Decimal ans=num1*num2;
+        System.debug('Multiplication of '+num1+' and '+num2+' is '+ans);
+    }
+    
+    public static void divide(Decimal num1, Decimal num2) {
+        if(num2 != 0) {
+        Decimal ans=num1/num2;
+        System.debug('Division of '+num1+' and '+num2+' is '+ans);
+        } else {
+            System.debug('Cannot divide by zero');
+        }
+    }
+    
+    public static void squareRoot(Decimal num) {
+        if(num >= 0) {
+            Decimal ans=Math.sqrt(num);
+            System.debug('Square root of '+num+' is '+ans);
+        } else {
+            System.debug('Square root of negative number cannot be evaluated');
+        }
+    }
+    
+    public static void logarithm(Decimal num) {
+        Decimal ans=Math.log10(num);
+        System.debug('Logarithm of '+num+' is '+ans);
+    }
+    public static void square(Decimal num) {
+        Decimal ans=num*num;
+        System.debug('Square of '+num+' is '+ans);
+    }
+    public static void power(Integer num1,Integer num2) {
+        Decimal ans=Math.pow(num1,num2);
+        System.debug('Power of '+num1+' and '+num2+' is '+ans);
+    }
+}

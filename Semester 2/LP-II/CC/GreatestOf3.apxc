@@ -1,0 +1,13 @@
+public class GreatestOf3 {
+    public static void greatest(Integer x, Integer y, Integer z) {
+        Integer result = x;
+        
+        if(y > result){
+            result = y;
+        }
+        if(z > result){
+            result = z;
+        }
+        System.debug('Greatest Number among '+x+ ', '+y+', '+z+ ' is: '+result);
+    }
+}
