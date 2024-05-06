@@ -1,0 +1,19 @@
+public class ElectricityBillGenerator {
+     public static void generateBill(Integer unitsConsumed) {
+        Decimal billAmount = 0;
+        Decimal slab1Rate = 5;
+        Decimal slab2Rate = 7;
+        Decimal slab3Rate = 10;
+
+        if (unitsConsumed <= 100) {
+            billAmount = unitsConsumed * slab1Rate;
+        } else if (unitsConsumed <= 200) {
+            billAmount = (100 * slab1Rate) + ((unitsConsumed - 100) * slab2Rate);
+        } else {
+            billAmount = (100 * slab1Rate) + (100 * slab2Rate) + ((unitsConsumed - 200) * slab3Rate);
+        }
+        System.debug('ABC Electricity Ltd.');
+        System.debug('Total units consumed are: '+unitsConsumed);
+        System.debug('Total amount: Rs.'+billAmount);
+     }
+}
