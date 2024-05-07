@@ -1,27 +1,27 @@
-def ask_question(question: str) -> bool:
+def ask_question(question):
     response = input(question + ": ").lower().strip()[0]
     return response == "y"
 
 
-def diagnose_allergies() -> bool:
+def diagnose_allergies():
     return ask_question("Do you experience any itching or swelling?") or ask_question(
         "Do you have red, watery eyes?"
     )
 
 
-def diagnose_fever() -> bool:
+def diagnose_fever():
     return ask_question("Do you have a temperature above 37.5°C?") or ask_question(
         "Do you experience chills?"
     )
 
 
-def diagnose_cold() -> bool:
+def diagnose_cold():
     return ask_question("Do you have a runny or stuffy nose?") or ask_question(
         "Are you sneezing frequently?"
     )
 
 
-def diagnose_flu() -> bool:
+def diagnose_flu():
     return (
         ask_question("Do you have body aches?")
         and ask_question("Do you feel tired or fatigued?")
@@ -29,13 +29,13 @@ def diagnose_flu() -> bool:
     )
 
 
-def diagnose_strep_throat() -> bool:
+def diagnose_strep_throat():
     return ask_question("Do you have a sore throat?") and ask_question(
         "Are your tonsils swollen?"
     )
 
 
-def diagnose_food_poisoning() -> bool:
+def diagnose_food_poisoning():
     return (
         ask_question("Do you feel nauseous?")
         and ask_question("Have you been vomiting?")
@@ -43,7 +43,7 @@ def diagnose_food_poisoning() -> bool:
     )
 
 
-def diagnose_appendicitis() -> bool:
+def diagnose_appendicitis():
     return ask_question("Do you have severe abdominal pain?") and ask_question(
         "Have you lost your appetite?"
     )
