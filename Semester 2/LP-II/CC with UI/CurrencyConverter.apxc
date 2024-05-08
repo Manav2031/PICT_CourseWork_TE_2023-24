@@ -1,0 +1,25 @@
+public class CurrencyConverter {
+    public String fromCurrency {get;set;}
+    public String toCurrency {get;set;}
+    public String result {get;set;}
+    public Decimal amount {get;set;}
+ 
+    public static Map<String, Decimal> exchangeRates = new Map<String, Decimal> {
+        'INRTOUSD' => 0.014,
+        'USDTOINR' => 71.42,  
+        'EURTOUSD' => 1.18,
+        'USDTOEUR' => 0.85,
+        'INRTOEUR' => 0.012,
+        'EURTOINR' => 82.58
+    };
+        
+    public pagereference convertCurrency() {
+        String exchangeRateKey1 = fromCurrency.toUpperCase() + 'TO' + toCurrency.toUpperCase();
+        result='Unsupported currency conversion';
+        if(exchangeRates.containsKey(exchangeRateKey1)) {
+            Decimal exchangeRate = exchangeRates.get(exchangeRateKey1);
+            result=amount+' '+fromCurrency.toUpperCase()+' = '+amount*exchangeRate+' '+toCurrency.toUpperCase();
+        }
+        return null;
+    }
+}

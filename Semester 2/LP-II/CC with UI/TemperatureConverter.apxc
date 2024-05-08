@@ -1,0 +1,14 @@
+public class TemperatureConverter {
+    public Decimal ans{get;set;}
+    public Decimal temperature { get; set; }
+    public Integer option{get;set;}
+    public pagereference converter() {
+        if(option==1){
+       ans=((((Decimal)9/5)*temperature).setScale(2)) + 32;  
+    }
+    else if(option==2){
+         ans=(((Decimal)5/9).setScale(2))*(temperature-32);
+    }
+    return null;
+}
+}

@@ -1,0 +1,17 @@
+<apex:page controller="ElectricityBillGenerator">
+    <apex:form>
+    <apex:pageBlock title="Electricity Bill Generator">
+        <apex:pageBlockSection>
+            
+            <apex:outputLabel>Enter the unit(s) of electricity consumed</apex:outputLabel>
+            <apex:inputText value="{!unitsConsumed}"/>
+            
+            <apex:outputLabel>Total amount::</apex:outputLabel>
+            <apex:inputText value="{!billAmount}"/>
+            
+            <apex:commandButton value="Generate Bill" action="{!generateBill}"/>
+            
+        </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

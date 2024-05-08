@@ -1,0 +1,48 @@
+public class Calculator{
+    public Decimal num1{get;set;}
+    public Decimal num2{get;set;}
+    public Integer operation{get;set;}
+    public String result{get;set;}
+    public pagereference cal(){
+        if(operation==1){
+            result = String.valueOf((num1+num2).setScale(2));
+        }
+        else if(operation==2){
+            result = String.valueOf((num1-num2).setScale(2));
+        }
+        else if(operation==3){
+            result = String.valueOf((num1*num2).setScale(2));
+        }
+        else if(operation==4){
+            if(num2 != 0) 
+            {
+            result = String.valueOf((num1/num2).setScale(2));
+            }
+         else {
+            result='Cannot divide by zero';
+        }
+        }
+     
+        else if(operation==5){
+            Integer i = (Integer)num1; 
+             Integer j= (Integer)num2;
+            result = String.valueOf(Math.pow(i,j));
+        }
+        else if(operation==6){
+            result = String.valueOf((num1*num1).setScale(2));
+        }
+        else if(operation==7){
+            result = String.valueOf((Math.log10(num1)).setScale(2));
+        }
+        else if(operation==8){
+            if(num1>=0){
+                result = String.valueOf((Math.sqrt(num1)).setScale(2));
+            }
+            else{
+                result='Invalid Input';
+            }
+        }
+        
+       return null; 
+    }
+}

@@ -1,0 +1,17 @@
+public class GreatestOf3 {
+	public Integer xvalue {get;set;}
+    public Integer yvalue {get;set;}
+    public Integer zvalue {get;set;}
+    public Integer result {get;set;}
+    
+    public pagereference greatest() {
+        result = xvalue;
+        if(yvalue > result){
+            result = yvalue;
+        }
+        if(zvalue > result){
+            result = zvalue;
+        }
+        return null;
+    }
+}

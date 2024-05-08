@@ -1,0 +1,23 @@
+<apex:page controller="GreatestOf3">
+    <apex:form>
+        <apex:pageBlock title="Greatest Of Three Numbers!">
+            <apex:pageBlockSection>
+                
+                <apex:outputLabel >Enter X value </apex:outputLabel>
+                <apex:inputText value="{!xvalue}"/> 
+                
+                <apex:outputLabel >Enter Y value </apex:outputLabel>
+                <apex:inputText value="{!yvalue}"/>    
+                
+                <apex:outputLabel >Enter Z value </apex:outputLabel>
+                <apex:inputText value="{!zvalue}"/>   
+                
+                <apex:outputLabel >Result </apex:outputLabel>
+                <apex:inputText value="{!result}"/>   
+                
+                <apex:commandButton value="Find" action="{!greatest}"/> 
+                
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+    </apex:form>  
+</apex:page>

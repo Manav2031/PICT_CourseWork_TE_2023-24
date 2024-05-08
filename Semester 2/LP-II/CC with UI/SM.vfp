@@ -1,0 +1,32 @@
+<apex:page controller="StudentMarksheet">
+    <apex:form>
+        <apex:pageBlock title="Student Marksheet">
+            <apex:pageBlockSection >
+                
+                <apex:outputLabel>Enter name of the student</apex:outputLabel>
+                <apex:inputText value="{!studName}" />
+                
+                <apex:outputLabel>Enter Maths marks</apex:outputLabel>
+                <apex:inputText value="{!mathsMarks}" />
+                
+                <apex:outputLabel>Enter Science marks</apex:outputLabel>
+                <apex:inputText value="{!scienceMarks}" />
+                
+                <apex:outputLabel>Enter English marks</apex:outputLabel>
+                <apex:inputText value="{!englishMarks}"/>
+                
+                <apex:outputLabel>Total Marks:</apex:outputLabel>
+                <apex:inputText value="{!totalMarks}" />
+                
+                <apex:outputLabel>Percentage:</apex:outputLabel>
+                <apex:inputText value="{!percentage1}" />
+                
+                <apex:outputLabel>Grade:</apex:outputLabel>
+                <apex:inputText value="{!grade}" />
+                
+                <apex:commandButton value="Generate" action="{!generateMarksheet}"/>
+                
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

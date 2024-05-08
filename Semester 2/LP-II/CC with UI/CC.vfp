@@ -1,0 +1,28 @@
+<apex:page controller="CurrencyConverter">
+    <apex:form >
+         <apex:pageBlock title="Currency Converter">
+             
+              <apex:pageBlockSection >
+             <apex:outputText value="INR to USD <br/> USD to INR<br/>EUR to USD<br/>USD to EUR<br/>INR to EUR<br/>EUR to INR<br/>" escape="false"/>
+            </apex:pageBlockSection>
+             
+              <apex:pageBlockSection >
+                  
+                <apex:outputLabel >Enter from currency value </apex:outputLabel>
+                <apex:inputText value="{!fromCurrency}"/>   
+                  
+                <apex:outputLabel >Enter to currency value </apex:outputLabel>
+                <apex:inputText value="{!toCurrency}"/>   
+                  
+                <apex:outputLabel >Enter amount </apex:outputLabel>
+                <apex:inputText value="{!amount}"/>  
+                  
+                <apex:outputLabel >Result </apex:outputLabel>
+                <apex:inputText value="{!result}"/> 
+                  
+                <apex:commandButton value="Convert" action="{!convertCurrency}"/>
+              </apex:pageBlockSection>
+             
+             </apex:pageBlock>
+    </apex:form>  
+</apex:page>

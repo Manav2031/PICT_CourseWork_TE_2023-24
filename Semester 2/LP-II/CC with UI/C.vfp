@@ -1,0 +1,22 @@
+<apex:page controller="Calculator">
+    <apex:form>
+        <apex:pageBlock title="Calculator">
+        <apex:pageBlockSection>
+            
+            <apex:outputLabel>Enter first number</apex:outputLabel>
+            <apex:inputText value="{!num1}"/>
+            
+            <apex:outputLabel>Enter second number(if required)</apex:outputLabel>
+            <apex:inputText value="{!num2}"/>
+            
+            <apex:outputLabel>Enter operation:<br/>1.Addition<br/>2.Subtraction<br/>3.Multiplication<br/>4.Division<br/>5.POW<br/>6.Square Of num1<br/>7.Log base 10 of num1<br/>8.Square Root Of num1</apex:outputLabel>
+            <apex:inputText value="{!operation}"/>
+            
+            <apex:commandButton value="Calculate" action="{!cal}"/> 
+            <br/>
+            <apex:outputLabel>Result:</apex:outputLabel>
+            <apex:inputText value="{!result}"/>
+        </apex:pageBlockSection>
+            </apex:pageBlock>
+    </apex:form>
+</apex:page>
