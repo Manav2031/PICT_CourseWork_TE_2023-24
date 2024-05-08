@@ -1,10 +1,4 @@
-#include <iostream>
-#include <sstream>
-#include <unordered_map>
-#include <vector>
-#include <queue>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 struct Flight {
@@ -29,8 +23,8 @@ unordered_map<string, Flight> flightSchedule = {
     {"Flight3", Flight("Tokyo", 200)}
 };
 
-bool isFlightAvailable(const string& destination, int weight) {
-    for (const auto& flight : flightSchedule) {
+bool isFlightAvailable(string& destination, int weight) {
+    for (auto flight : flightSchedule) {
         if (flight.second.destination == destination && weight <= flight.second.capacity) {
             return true;
         }
@@ -38,7 +32,7 @@ bool isFlightAvailable(const string& destination, int weight) {
     return false;
 }
 
-void assignCargoToFlights(const vector<Cargo>& cargoList) {
+void assignCargoToFlights(vector<Cargo>& cargoList) {
     cout << "Assigning cargo to flights:\n";
 
     // Sort cargo based on priority
@@ -47,13 +41,13 @@ void assignCargoToFlights(const vector<Cargo>& cargoList) {
         return a.priority > b.priority;
     });
 
-    for (const auto& cargo : sortedCargo) {
+    for (auto cargo : sortedCargo) {
         bool assigned = false;
 
-        for (auto& flight : flightSchedule) {
+        for (auto flight : flightSchedule) {
             if (cargo.type == "Perishable" && flight.second.destination == "New York") {
                 // Perishable cargo should be assigned to flights going to New York
-                if (cargo.weight <= flight.second.capacity) {
+                if (cargo.weight <= flight.second.capacity && isFlightAvailable(flight.second.destination,cargo.weight)) {
                     assigned = true;
                     flight.second.cargoList.push_back(cargo.type); // Track cargo assigned to flight
                     cout << "Cargo type: " << cargo.type << ", Weight: " << cargo.weight
@@ -63,7 +57,7 @@ void assignCargoToFlights(const vector<Cargo>& cargoList) {
                 }
             } else if (cargo.type == "Fragile") {
                 // Fragile cargo can be assigned to any flight
-                if (cargo.weight <= flight.second.capacity) {
+                if (cargo.weight <= flight.second.capacity && isFlightAvailable(flight.second.destination,cargo.weight)) {
                     assigned = true;
                     flight.second.cargoList.push_back(cargo.type); // Track cargo assigned to flight
                     cout << "Cargo type: " << cargo.type << ", Weight: " << cargo.weight
