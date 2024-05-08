@@ -25,7 +25,7 @@ unordered_map<string, Flight> flightSchedule = {
     {"Flight3", Flight("Tokyo", 200)}
 };
 
-bool isFlightAvailable(string& destination, int weight) {
+bool isFlightAvailable(string destination, int weight) {
     for (auto flight : flightSchedule) {
         if (flight.second.destination == destination && weight <= flight.second.capacity) {
             return true;
@@ -34,7 +34,7 @@ bool isFlightAvailable(string& destination, int weight) {
     return false;
 }
 
-void assignCargoToFlights(vector<Cargo>& cargoList) {
+void assignCargoToFlights(vector<Cargo> cargoList) {
     cout << "Assigning cargo to flights:\n";
 
     // Sort cargo based on priority

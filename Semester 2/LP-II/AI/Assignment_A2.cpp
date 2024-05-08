@@ -26,9 +26,11 @@ int main(){
 
     priority_queue <pair<int,pair<int,vector<vector<int>>>>, vector<pair<int,pair<int,vector<vector<int>>>>>, greater<pair<int,pair<int,vector<vector<int>>>>> > pq;
     pq.push({heu(start,end,0),{0,start}});
+    int c=0;
 
-    while (!pq.empty()){
+    while (!pq.empty() && c<=1000){
         cout<<endl;
+        c++;
         cout<<"selected operation"<<endl;
         int val = pq.top().first;
         int level = pq.top().second.first;
@@ -75,5 +77,7 @@ int main(){
         }
         cout<<"end of possible moves"<<endl;
     }
+    if(c>1000)
+    cout<<"Solution does not exist"<<endl;
    
 }
