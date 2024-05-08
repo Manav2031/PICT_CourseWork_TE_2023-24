@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Flight {
+class Flight {
+    public:
     string destination;
     int capacity;
     vector<string> cargoList; // Track cargo assigned to this flight
@@ -9,7 +10,8 @@ struct Flight {
     Flight(string dest, int cap) : destination(dest), capacity(cap) {}
 };
 
-struct Cargo {
+class Cargo {
+    public:
     string type;
     int weight;
     int priority; // Priority level for cargo handling
