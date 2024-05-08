@@ -1,117 +1,92 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-
-map <string,bool> vis;
-map <string, vector<string>> adj;
-queue<string> q;
-
-
-void setVisitedtoZero()
+class Graph
 {
-    for(auto pair:adj)
+    int n,e;
+    unordered_map<string,vector<string>> adj;
+    queue <pair<string,int>> q;
+    public:
+    Graph(int n1,int e1)
     {
-        vis[pair.first] = false;
+        n=n1;
+        e=e1;
+        take_input();
     }
-}
-
-
-
-void DFS(string node)
-{
-    vis[node] = true;
-    cout<<node<<" ";
-
-
-    for (auto it:adj[node])
+    void take_input()
     {
-        if(!vis[it])
-        DFS(it);
+        cout<<"Enter starting and ending cities of the routes"<<endl;
+        string a,b;
+        for(int i=0;i<e;i++)
+        {
+            cin>>a>>b;
+            adj[a].push_back(b);
+            adj[b].push_back(a);
+        }
     }
-}
 
-
-
-void BFS()
-{
-    if(q.empty())
+    void dfs(pair<string,int> p, unordered_map<string,int> &v)
+    {
+        string node=p.first;
+        int level=p.second;
+        v[node]=true;
+        cout<<node<<" "<<level<<endl;
+        for(auto it:adj[node])
+        {
+            if(!v[it])
+            dfs({it,level+1},v);
+        }
+    }
+    void DFS()
+    {
+        unordered_map<string,int> v;
+        cout<<"Enter starting city for DFS"<<endl;
+        string s;
+        cin>>s;
+        cout<<"DFS:"<<endl;
+        dfs({s,0},v);
+    }
+    void bfs(unordered_map<string,int>& v)
+    {
+        if(q.empty())
         return;
 
-    string node = q.front();
-
-    q.pop();
-
-    cout<<node<<" ";
-
-    for(auto it:adj[node])
-    {
-        if(!vis[it])
+        string node=q.front().first;
+        int level=q.front().second;
+        q.pop();
+        cout<<node<<" "<<level<<endl;
+        for(auto it:adj[node])
         {
-            vis[it] = true;
-            q.push(it);
+            if(!v[it])
+            {
+                v[it]=true;
+                q.push({it,level+1});
+            }
         }
+        bfs(v);
+    }
+    void BFS()
+    {
+        unordered_map<string,int> v;
+        cout<<"Enter starting city for BFS"<<endl;
+        string s;
+        cin>>s;
+        q.push({s,0});
+        v[s]=1;
+        cout<<"BFS"<<endl;
+        bfs(v);
     }
 
-    BFS();
-}
-
-
-
-
-int main()
-{
-
-    int n,m;
-    cout<<"Enter the number of routes and cities of the graph:\n";
-    cin>>n>>m;
-
-    string x,y;
-    cout<<"Enter starting and ending cities of the routes:\n";
-    
-    for(int i=0; i<n; i++)
+    int main()
     {
-        cin>>x>>y;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
+        int n;
+        cout << "Enter number of cities" << endl;
+        cin >> n;
+        int e;
+        cout << "Enter number of routes" << endl;
+        cin >> e;
+        Graph g(n, e);
+        g.BFS();
+        g.DFS();
     }
-
-    while(true)
-    {
-        cout<<"1. DFS"<<endl;
-        cout<<"2. BFS"<<endl;
-        cout<<"3. Exit"<<endl;
-        cout<<"Enter your choice:"<<endl;
-        int choice;
-        string node;
-        cin>>choice;
-        if(choice==1)
-        {
-            cout<<"Enter the city to start with:\n";
-            cin>>node;
-            cout<<"\nDFS:\n";
-            setVisitedtoZero();
-            DFS(node);
-            cout<<endl;
-        }
-        else if(choice==2)
-        {
-            cout<<"Enter the city to start with:\n";
-            cin>>node;
-            q.push(node);
-            cout<<"\nBFS:\n";
-            setVisitedtoZero();
-            vis[node] = true;
-            BFS();
-            cout<<endl;
-        }
-        else if(choice==3)
-        {
-            cout<<"Program exited successfully."<<endl;
-            break;
-        }
-        else
-        cout<<"Invalid choice. Please enter a valid number between 1 and 3."<<endl;
-    }
-    return 0;
 }
