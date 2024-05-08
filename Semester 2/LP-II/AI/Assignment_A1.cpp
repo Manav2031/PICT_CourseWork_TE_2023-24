@@ -76,17 +76,17 @@ class Graph
         cout<<"BFS"<<endl;
         bfs(v);
     }
+};
 
-    int main()
-    {
-        int n;
-        cout << "Enter number of cities" << endl;
-        cin >> n;
-        int e;
-        cout << "Enter number of routes" << endl;
-        cin >> e;
-        Graph g(n, e);
-        g.BFS();
-        g.DFS();
-    }
+int main()
+{
+    int n;
+    cout << "Enter number of cities" << endl;
+    cin >> n;
+    int e;
+    cout << "Enter number of routes" << endl;
+    cin >> e;
+    Graph g(n, e);
+    g.BFS();
+    g.DFS();
 }
